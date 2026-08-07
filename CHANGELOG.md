@@ -1,0 +1,233 @@
+# OMDS Project Changelog
+
+All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
+
+## [Unreleased]
+### Added
+- Added an immutable shared CRM activity log foundation with Lead and Client overview panels, secure reads, and atomic archive/restore entries.
+- Added automatic Lead and Client creation/update activity entries, including linked client event creation.
+- Added Client Log activity entries for linked quote, contract, invoice, and message creation.
+- Added automatic activity entries for lead conversion, linked event updates, quote workflow actions, and contract workflow actions.
+- Localized activity labels from event codes and added loading/error states to the activity panels.
+- Added focused coverage for localized activity labels and legacy-summary fallback.
+- Added the initial unified Messages module foundation: provider-neutral mailbox, thread, message, participant, and attachment schema, filtered thread API, and Gmail-style inbox shell.
+- Added Messages thread detail loading, unread clearing, and stored outbound reply composition.
+- Added private message attachment storage, upload/download routes, signed URLs, and reply-composer attachment selection.
+- Added attachment links in thread history and provider-neutral thread updates for CRM linking, staff assignment, star, archive, and read state.
+- Added selected-thread controls for manual Lead, Client, Event, and staff linking, plus star/archive state.
+- Added searchable Lead, Client, and Event lookup fields for conversation linking.
+- Added Message Connections settings with bilingual email/social setup guidance and a signed Meta webhook verification scaffold.
+- Added searchable staff assignment to the Messages CRM linking panel, aligned with the current role/UUID staff schema.
+- Added bilingual reply status feedback clarifying that outbound replies are saved to CRM while external provider delivery remains pending.
+- Added a provider-neutral IMAP/SMTP adapter contract and server-only email configuration reader for the initial company mailbox.
+- Added a guarded email adapter factory with focused coverage for missing and complete environment configuration; live protocol support remains intentionally pending.
+- Added the IMAP/SMTP email adapter with MIME parsing, attachment normalization, incremental UID-based sync, reply threading, and SMTP delivery.
+- Expanded the phone selector to the complete libphonenumber country and calling-code catalog.
+- Replaced app phone-entry fields with a shared country selector prioritizing Mexico, the United States, and Canada, with country search and a clear-search control.
+- Updated the contract preview renderer test to match the current `p-6` container spacing.
+- Added localized error feedback when archive or restore operations fail.
+- Made archive/unarchive state changes and audit events atomic through a database RPC.
+- Added read-only archive history panels to lead and client detail views.
+- Added owner-attributed audit events for lead and client archive/unarchive changes.
+- Added confirmation dialogs before archiving or restoring leads and clients.
+- Restricted lead and client archive/unarchive mutations to CRM owners.
+- Added archived-record recovery views and Unarchive actions for leads and clients; booking status tabs remain separate from production archive state.
+- Added reversible client archiving from the client list, matching the lead archive workflow.
+- Added authenticated, reversible lead archiving from the lead list; archived records are removed from active results without deleting history.
+- Added nullable archive timestamps for leads and clients and excluded archived records from default CRM lists without deleting their history.
+- Confirmed event files currently store external URL references only; development purge removes their database rows and no Supabase Storage deletion is needed until uploads are introduced.
+- Updated development client purging to remove event-linked payroll payment records before deleting payroll line items, while preserving staff and payroll catalog data.
+- Added development-only owner-authorized purge RPC foundations for selected leads and clients, preserving venues and global configuration.
+- Normalized Google Distance Matrix responses into stable distance and duration fields for venue travel calculations.
+- Added cached venue travel values so venue saves reuse stored distance/time by default, with an explicit bilingual Refresh travel action for manual Google recalculation.
+- Added localized Google attribution beneath Google Places venue suggestions for Maps Platform compliance.
+- Hardened final-save venue matching against accents, punctuation, and whitespace, with duplicate-insert recovery for existing Google venue names.
+- Fixed final-save Google venue resolution to reuse an exact existing venue instead of attempting a duplicate insert, and added explicit server-side handling for venue creation failures.
+- Added a shared venue picker to lead and client forms with stored-venue search, Google Places autocomplete/details review, and deferred venue creation during final save.
+- Added a nullable lead-to-venue relationship while retaining the existing lead venue name for backward compatibility and legacy lead conversion.
+- Added automatic Google driving-distance and travel-time enrichment when venues are created or edited, using the HQ address from Travel/Flete Settings and persisting the returned venue travel fields.
+- Fixed venue autocomplete selection for Google Places responses with incomplete address components by safely ignoring components without type metadata.
+- Added server-backed Google Places venue autocomplete; selecting a place fills the venue name, address fields, website, phone, and Google Maps link for review before saving.
+- Added a server-only Google Maps integration foundation with `GOOGLE_MAPS_API_KEY` configuration, Places API (New) autocomplete/details requests, and Distance Matrix driving-distance requests.
+- Removed unused quoted line-item table rows from contract PDFs when a booking contains fewer products than the template supports, preventing unresolved second-item tags from appearing.
+- Replaced the legacy invoice PDF renderer with the quote-matched white-page and `#fffdf8` document shell, dynamic company profile details, formatted monetary values, and a shared inline/download admin path.
+- Updated quote PDFs to label item and total amounts with the selected quote currency and show the effective MXN exchange rate used for non-MXN quote displays.
+- Replaced the legacy admin quote PDF renderer with a branded white-page and `#fffdf8` document shell, hydrated company profile details, and one shared inline/download PDF path.
+- Registered `financials.retainer_percent` and `financials.final_payment_percent` in the Template Token catalog so both dynamic payment-plan percentage tags are available to template authors.
+- Replaced hardcoded payment schedule percentages with `financials.retainer_percent` and `financials.final_payment_percent` tokens, so contract payment tables follow the configured payment plan automatically.
+- Targeted approved questionnaire application at the client currently open in the overview, preventing address changes from being written to a different event contact.
+- Made approved questionnaire address persistence resilient when the template field scope is incomplete or the event contact is not marked primary; the first event contact is now used as a fallback client target.
+- Fixed questionnaire review controls so already-approved submissions no longer show an ineffective repeat-approval action; approved records now expose the apply-approved workflow that updates client data.
+- Fixed approved questionnaire application to persist `client.address` into `clients.street_address`, allowing admin and portal contract PDFs to display the submitted client address instead of "To be confirmed".
+- Unified portal contract PDF hydration with admin for accepted quote line items, totals, invoices, payment plans, event metadata, client email, and address; also made admin client lookup tolerate contacts missing the primary flag.
+- Added the immutable `contract_audit_events` table and persisted client terms-accepted and contract-signed events with actor, authentication, network, hash, consent, and hashed portal-key metadata.
+- Added unit coverage for signing metadata construction, deterministic document hashes, consent persistence, audit-event ordering, and signature-page verification output.
+- Added regression tests covering signature-page verification metadata rendering and ensuring unsigned contracts do not show signed verification details.
+- Made client portal contract signing idempotent: repeated or concurrent requests preserve the first signature metadata and do not duplicate audit events or invoice creation.
+- Added contract signature-page verification metadata for SHA-256 document hash, portal authentication method, signing timestamp, IP address, and user-agent in admin and portal PDFs.
+- Started the electronic-signature evidence trail by persisting consent text, portal authentication method, signing timestamp, contract snapshot SHA-256 hash, IP address, user-agent, and separate terms-accepted and signed events.
+- Added a canonical direct/PV contract-body fallback to the portal PDF route so signed contracts cannot render as an empty financials page when a snapshot or database template body is missing.
+- Fixed signed portal contract PDFs to resolve the persisted contract body before template fallback, restoring the financials and terms pages after signing.
+- Fixed portal contract PDFs to display the client's stored street, city, state/province, and country address instead of incorrectly falling back to "To be confirmed".
+- Updated the client portal contract page to use the same resolved inline PDF viewer as admin, with the acceptance checkbox and Sign button positioned below the full document.
+- Added an explicit electronic-signature acceptance checkbox to the public contract portal, disabled signing until accepted, persisted the acceptance event, and added lifecycle audit entries to the final PDF signature page.
+- Changed admin contract View to use the same inline server-generated PDF as Download, ensuring all financial, line-item, payment, currency, company, and signing tags match exactly.
+- Aligned admin contract preview company and signer tokens with the live profiles used by exported contract PDFs.
+- Aligned the admin contract View with the shared PDF-style preview, including branded cover/signature sections, layout styling, and live client/event/venue tags.
+- Added saved contract body rendering to the admin client contract detail page so View displays the actual contract content.
+- Forced admin client action-menu destination links to load nested contract routes directly so the contract detail page is shown reliably.
+- Fixed admin client contract action links so the View navigation is not interrupted when the row action menu closes.
+- Removed the full USD placeholder markup from MXN-only contract PDFs, including the dollar signs and emphasis wrappers.
+- Suppressed USD payment schedule references for MXN-only quotes so the USD column no longer duplicates MXN amounts.
+- Added payment-plan fallback calculations for contract schedule tags, including retainer, balance, due date, and USD reference values when invoice rows are not yet available.
+- Updated contract payment schedule tag lookup to support both direct client invoices and preferred-vendor internal invoices.
+- Formatted contract monetary tags with thousands separators and two decimal places for clearer PDF financial tables.
+- Connected contract financial-page tags to accepted quote version totals, accepted quote line items, and non-void retainer/balance invoices.
+- Wired contract template tags for event metadata, venue details, client/company fields, and signing profile values into the shared PDF and portal rendering flows.
+- Created `.github/copilot-instructions.md` to enforce 300 LOC limits, i18n rules, and feature patterns.
+- Initialized root `CHANGELOG.md` and `TODO.md` tracking files.
+- Migrated all outstanding open tasks (Phases 1-9) from `other_files/Docs_MD/new_TODO_260720.md` into root `TODO.md`.
+- Built the `settings/payment-plan` feature (types, schema/parser, repository, API service, hooks, list/create/edit UI, API routes, and a Payment Plans card on the Settings home page).
+- Added migration `20260724010000_add_quote_payment_plan.sql` linking `quote_versions.payment_plan_id` to `payment_plans`.
+- Wired the Quote Builder settings drawer's `Payment` accordion to a real payment plan selector (`QuotePaymentPlanSection`), replacing the earlier placeholder text.
+- Added a quick link from the quote payment selector to `/settings/payment-plans` for easier plan management.
+- Added quote-level questionnaire and contract template selectors, with booking-type defaults and persisted `quote_versions.questionnaire_template_key` / `contract_template_key` fields.
+- Added `settings.paymentPlan.*` and `crm.quote.settings.payment.*` i18n keys (English and Spanish).
+- Added `crm.quote.settings.questionnaire.*`, `crm.quote.settings.contract.*`, and booking/event type context labels for the new quote document selectors.
+- Built `settings/questionnaire-template` and `settings/contract-template` management sections with list/create/edit flows, API routes, localized settings cards, and Supabase-backed CRUD for both template types.
+- Added migrations for `questionnaire_templates` and `contract_templates` so the new settings sections have persistent storage.
+- Wired the questionnaire template form to a richer JSON definition payload while keeping the contract template editor intentionally simpler.
+- Replaced the questionnaire template's raw JSON-only editor with a visual section/question builder that stays synchronized with the stored definition JSON.
+- Moved approved questionnaire application out of the SQL RPC and into the questionnaire repository so review/apply behavior is shared consistently across questionnaire submissions.
+- Added template-definition delivery to public questionnaires and made the portal questionnaire form render from the selected questionnaire template, keeping the current booking form as a fallback.
+- Added a portal RPC migration so questionnaire template definitions are joined into the public questionnaire payload.
+- Added bilingual questionnaire template editing support and seeded the current booking questionnaire as the default template for direct and preferred-vendor bookings.
+- Localized questionnaire template builder dropdown labels for field-key mapping and question types in both English and Spanish.
+- Added a public portal English/Spanish language switcher and migrated portal tabs, summary, quotes, and questionnaire form UI text to live locale translations.
+- Scoped approved-questionnaire apply updates by template `fieldKey` coverage so partial or future questionnaire templates only update the intended client/event/planner records.
+- Added a nested Questionnaire Template `Catalog` page and header button under `/settings/questionnaire-templates/catalog` so field keys can be reviewed without adding a new top-level Settings section.
+- Added database-backed Questionnaire Field Catalog CRUD (list/create/edit + API + migration) under `/settings/questionnaire-templates/catalog`, and wired the template builder to load Question Field options from this catalog with static fallback.
+- Added a one-click `Import Defaults` action in Questionnaire Field Catalog that bulk upserts the legacy builder field list into the DB catalog, including EN/ES labels and inferred target metadata.
+- Made Questionnaire Field Catalog `Field Key` selection preset-based and auto-filled the technical mapping from the selected key so non-technical admins do not need to type schema details by hand.
+- Reworked the Questionnaire Field Catalog form into a safer guided flow with a read-only technical mapping preview instead of editable schema controls.
+- Removed the manual Catalog create entry point from the UI and redirected the `/settings/questionnaire-templates/catalog/new` route back to the catalog list so new fields are introduced only through the import flow.
+- Added a preview-and-confirm step before importing default questionnaire field catalog entries so admins can review the exact rows before they are written.
+- Added safe optional questionnaire fields for `Client Role` and `Approximate Guest Count`, with portal rendering and CRM apply support for the guest count and primary-contact role mapping.
+- Added a capture-only `Secondary Contact` text field to the questionnaire so admins can review a `Name & Role` note now and manually associate the contact later.
+- Auto-created an event-side secondary contact record from the questionnaire's `Secondary Contact` field and surfaced those records in the event details view.
+- Upgraded `Secondary Contact` from a single text input to a repeatable structured group (name, role, phone, email) in the portal questionnaire, with backward-compatible apply logic.
+- Added duplicate prevention when applying secondary contacts by normalizing and matching existing event-side contacts (email first, then phone, then name).
+- Refactored oversized questionnaire apply and portal questionnaire form files into smaller focused modules under 300 LOC.
+- Added automated file-size enforcement via `npm run check:file-sizes` with warning thresholds, global caps, and baseline exception caps to prevent new god files or regressions.
+- Tuned file-size warnings to trigger near the ceiling (`warnLines: 290`) so sub-300 files are only refactored when an update would exceed the cap.
+- Migrated questionnaire defaults and builder options to use `additional.secondaryContacts` (repeatable) as the primary secondary-contact field key, while preserving runtime compatibility for legacy `additional.secondaryContact` templates.
+- Fixed questionnaire creation to inherit `template_key` from the accepted/latest quote version's `questionnaire_template_key`, so admin-created questionnaires and portal payloads use the selected Quote Builder questionnaire template.
+- Fixed quote revision cloning to preserve `questionnaire_template_key`, `contract_template_key`, and `payment_plan_id` across versions.
+- Added a portal quote-accept success prompt with two actions: stay on quote page or proceed directly to the questionnaire tab.
+- Added portal tab deep-link support via `?tab=` so next-step prompts can navigate directly to unlocked sections.
+- Updated questionnaire submit success messaging to explicitly confirm review is pending and OMDS will follow up shortly.
+- Added migration `20260725050000_auto_create_questionnaire_on_portal_quote_accept.sql` so accepting a portal quote automatically creates and sends a questionnaire (when none exists) using the accepted quote version's questionnaire template key.
+- Added contract template inheritance from the selected quote version and auto-prepared the contract when an approved questionnaire is applied, so the contract handoff now carries the quote-selected template key.
+- Added public portal contract and invoice sections backed by magic-link document lookups, plus magic-link action routes for contract signing and invoice payment.
+- Added payment-plan-based invoice splitting so accepted quotes now generate retainer and balance invoices when appropriate, with portal installment labels and installment-aware public invoice lookup.
+- Polished the quote print/PDF layout to better match the saved quote design reference, with a stronger header, prepared-for block, and cleaner metadata/table styling.
+- Added the provided OMDS color logo asset to the quote print/PDF header and stamp areas via a served static branding path.
+- Added invoice print/export support with a new `/invoice-print/[eventId]/[invoiceId]` route, print page/document components, and an invoice-card print action.
+- Added true PDF download endpoints for quotes and invoices (`/api/crm/events/[eventId]/quotes/[quoteId]/pdf` and `/api/crm/events/[eventId]/invoices/[invoiceId]/pdf`) and wired Download PDF actions on both print pages.
+- Refined downloadable quote/invoice PDF rendering to align with the preferred legacy layout style (serif headline treatment, prepared/detail blocks, beige table headers, terms/totals split, signature row, and closing thank-you bar).
+- Refined contract preview and PDF rendering with a stronger cover section, formal body hierarchy, and signature block styling so the exported contract feels closer to the OMDS reference.
+- Wired the contract preview and downloadable PDF flow through a shared cover/clause/signature shell so the editor preview and exported document now share the same branded document structure.
+- Added client-portal document list metadata and persistent view-tracking support via `client_portal_document_views`, including a secure RPC to mark documents viewed by portal access key.
+- Reworked portal Quotes, Contracts, Invoices, and Questionnaires tabs into compact list/table rows with required ID, date, version/status, and action columns.
+- Added clean portal document view routes at `/portal/[accessKey]/documents/[documentKind]/[documentId]` with dedicated detail screens per document type.
+- Enforced view-before-download in portal flows: document download actions are now enabled only after the document has been opened in its detail route.
+- Added portal PDF download endpoints for quote/contract/invoice/questionnaire documents through `/api/portal/[accessKey]/documents/[documentKind]/[documentId]/pdf`.
+- Added OMDS document-number and filename utilities for standardized naming (`OMDS-INV####.pdf`, `OMDS-QNR####.pdf`, `OMDS-QUO####-v#.pdf`, `OMDS-CON####.pdf`) and applied them to CRM quote/invoice PDF endpoints.
+- Added contract and questionnaire server-side PDF generation helpers so those document classes also support true downloadable PDFs.
+- Added forced contract Terms & Conditions pagination by splitting clauses into separate pages at sections 6 and 11, with section headers repeated on each terms page.
+- Added print-safe contract PDF margin tuning for header/footer-rendered pages to preserve top and bottom spacing in downloads.
+- Fixed contract PDF export to prefer the stored contract snapshot body over the current template body so refreshed contracts no longer render the legacy layout.
+- Fixed `resolveContractTemplateKeyForEvent` to fall back to the system default contract template (matched by booking type) when no template is explicitly set on the quote version, so contracts are now auto-created even without an explicit Quote Builder selection.
+- Fixed portal contract PDF date sourcing to prefer the event date when available so cover-page event dates no longer drift to send/create timestamps.
+- Fixed contract PDF venue token hydration to use direct venue lookup from `events.venue_id`, reducing blank venue output from relation-join edge cases.
+- Added portal questionnaire save-progress and edit/resubmit support (including submitted-questionnaire editing mode) with a new save-progress RPC and API action handling.
+- Converted admin Client Details document tabs (Quotes, Questionnaires, Contracts, Invoices) to list-first tables with empty-state-first behavior and row-level actions.
+- Added admin Quotes `+New Quote` entry that opens the existing quote builder flow while preserving a list overview with View/Download actions.
+- Added a reusable admin row-actions dropdown menu for dense list tables so quote/contract/invoice/questionnaire actions stay compact.
+- Added an authenticated admin contract PDF download endpoint at `/api/crm/events/[eventId]/contracts/[contractId]/pdf` and wired it to contract list actions.
+- Fixed client-detail document tab action menus being visually clipped by the section wrapper so row dropdowns now render fully.
+- Updated admin row action dropdown positioning to open upward from the trigger, avoiding viewport scroll to reach menu options on lower rows.
+- Fixed remaining admin list dropdown clipping under table header boundaries by separating table wrappers into visible outer shells with inner horizontal scrollers.
+- Replaced row action `<details>` menus with a fixed-position anchored popover so actions are no longer clipped by table/header overflow layers.
+- Added dedicated admin contract and questionnaire detail routes at `/crm/clients/[id]/contracts/[contractId]` and `/crm/clients/[id]/questionnaires/[questionnaireId]`.
+- Updated admin Contracts and Questionnaires list `View` actions to navigate to dedicated detail pages instead of inline expansion.
+- Added an ad-hoc Admin Invoice builder flow (`+Add Invoice`) with a modal form for title, amount, due date, notes, and taxable flag.
+- Added authenticated `POST /api/crm/events/[eventId]/invoices` support and repository/service wiring for creating single-line ad-hoc invoices.
+- Fixed Admin `+Add Questionnaire` failures by making questionnaire creation idempotent on `(event_id, template_key)` conflicts and returning the existing questionnaire record instead of throwing.
+- Added booking-type fallback template resolution for questionnaire create (`new_booking` vs `pv_new_booking`) when no quote-derived template key is available.
+- Added `event_message_drafts` persistence and authenticated CRM API routes for listing, creating, and updating message draft status by event.
+- Replaced the Client Details Messages tab placeholder with a live messages table showing draft/sent status and recipient/subject metadata.
+- Added a Questionnaire send modal in admin detail flow with multi-recipient selection, ad-hoc recipient email, questionnaire template and email template metadata, and draft-first save actions.
+- Wired Questionnaire send flow to save draft messages before final send, with `Save Draft` and `Save Draft + Mark Sent` actions.
+- Added a Contract send modal in admin detail flow with recipient selection, ad-hoc recipient support, contract/email template metadata, and draft-first send controls.
+- Wired Contract send to the message-draft pipeline with `Save Draft` and `Save Draft + Mark Sent` actions before contract status transitions.
+- Enabled live `Send Reminder` actions in admin Questionnaires, Contracts, and Invoices list rows, creating sent reminder records through the shared Messages draft pipeline.
+- Added shared reminder message composition helpers so document reminders use consistent recipients, subjects, and metadata.
+- Added inline success/error feedback for row-level reminder sends and guarded reminder actions while message mutations are in-flight to prevent duplicate sends.
+- Added row-level reminder in-flight indicators (`Sending...`) so users see progress on the specific document being processed.
+- Replaced section-level reminder notices with per-row reminder feedback, including row-specific send timestamps and row-specific failure hints next to each action menu.
+- Made row-level reminder timestamps persistent by deriving them from saved `event_message_drafts` reminder records, so statuses survive refresh/navigation.
+- Enriched reminder metadata with the authenticated sender identity and surfaced per-row sender email under reminder timestamps in Questionnaires, Contracts, and Invoices.
+- Added compact per-row reminder history trails (latest sends with timestamp and sender) in Questionnaires, Contracts, and Invoices so recent reminder activity is visible in-place.
+- Added line-item hover previews in CRM Quote and Invoice list rows so staff can quickly see what each document contains without opening the full view.
+- Replaced native-title line-item previews with an explicit hover/click popover so item details reliably display above table overflow contexts.
+- Replaced always-visible reminder history text blocks with compact per-row history popovers in Questionnaires, Contracts, and Invoices to reduce list density while preserving recent activity detail.
+- Refactored line-item and reminder detail overlays to use a shared icon-popover primitive for consistent interaction behavior and lower maintenance overhead.
+- Improved row popover accessibility by replacing generic icon labels with context-specific aria labels, and removed an unused reminder metadata helper export.
+- Enhanced shared icon-popover accessibility semantics with explicit popup relationships (`aria-controls`, `aria-expanded`, `aria-haspopup`) and Escape keyboard shortcut metadata.
+- Added keyboard focus handoff for shared icon-popovers so Enter/Space/ArrowDown can open the panel and move focus into popover content for better assistive-tech navigation.
+- Added context-specific visually hidden popover headings (line-items and reminder history) so screen readers receive clearer panel context without changing visible UI.
+- Added a new Settings Email Templates section with list/create/edit flows, authenticated API routes, Supabase repository/service wiring, and bilingual dictionary support.
+- Added migration `20260727020000_create_email_templates.sql` with RLS policy, per-document-kind default enforcement, and seed templates for contract/questionnaire send flows.
+- Replaced hardcoded contract/questionnaire send-modal email template options with live options loaded from Settings Email Templates, including safe fallback options.
+
+### Changed
+- Migrated primary AI development context from the Codex extension to GitHub Copilot Pro+.
+- Removed hardcoded runtime template lists from quote/document and send flows so template selection now resolves from Settings data, with questionnaire fallback resolution backed by the questionnaire template table instead of static booking-type keys.
+- Added a dedicated `supabase/seeds` template-seeding path and restart workflow guidance so future bootstrap template data can be maintained separately from schema migrations.
+- Standardized Settings catalog/template list headers to match Travel/Flete back-navigation style (ArrowLeft icon + Back link) across Expense Categories, Equipment Catalog, Product Catalog, Payroll Task Catalog, Payment Plans, Questionnaire Templates, Contract Templates, and Email Templates.
+- Added archive/unarchive and delete actions for Questionnaire Templates, Contract Templates, and Email Templates in Settings list views, including new PATCH/DELETE API handlers and localized confirmation prompts.
+- Added a server-side delete safeguard that blocks deleting default questionnaire/contract/email templates and returns a structured conflict code consumed by localized UI error alerts.
+- Added in-use delete safeguards for questionnaire/contract/email templates so deletion is blocked when templates are referenced by historical records, with localized conflict messaging that guides users to archive instead.
+- Hardened contract snapshot behavior by persisting `contract_data.body` during contract create/send flows, backfilling missing snapshot bodies via migration, and updating the public portal contract function to prefer stored snapshot body before template fallback.
+- Upgraded Questionnaire Template settings builder with section accordions, question reordering controls, upload/image question types, and a live client-facing preview panel.
+- Extended public questionnaire form handling to support dynamic/custom question values (including upload/image question filename capture) via persisted `dynamicResponses` payload data.
+- Added persistent portal questionnaire uploads with a dedicated upload API route, protected Supabase storage bucket policies keyed by portal access token path, and dynamic response payloads storing structured uploaded-file metadata.
+- Added portal questionnaire attachment chips with open/remove actions and a secure signed-link refresh endpoint scoped to accessKey/questionnaireId path validation.
+- Added live preview panels to Contract Template and Email Template settings forms so admins can review final client-facing copy while editing.
+- Added a contract-template settings preview pane with a client-style preview toggle and a direct PDF download action for the current template draft.
+- Seeded the OMDS direct and preferred-vendor contract templates with structured HTML bodies so preview and PDF rendering use a more document-like layout from the start.
+- Added secure portal attachment deletion support for questionnaire uploads and upgraded upload UX with inline partial-failure messaging instead of all-or-nothing alerts.
+- Added per-file portal questionnaire upload status chips (queued/uploading/uploaded/failed) with bilingual labels so clients can see live outcome per selected attachment.
+- Added an Admin Client Details Files tab that aggregates questionnaire-uploaded attachments and supports secure Open/Delete actions via authenticated CRM upload endpoints.
+- Added a confirmation step before deleting attachments from the Admin Client Details Files tab to reduce accidental file removal.
+- Replaced the browser confirm in Admin Client Details Files with the shared CRM confirmation modal for consistent in-app UX and localized deletion messaging.
+- Removed a stale duplicate TODO item for questionnaire upload persistence to keep roadmap status accurate.
+- Added Vitest test runner scripts and regression tests covering questionnaire template scope gating so partial template field coverage only applies included CRM field groups.
+- Added a shared Contract/Email template token assistant with categorized merge-tag insertion, unknown-placeholder warnings, and live preview token rendering using sample values.
+- Added a shared Contract/Email snippet library assistant with quick-insert clauses/messages for body text and optional subject insertion in email templates.
+- Added a save blocker for Contract/Email templates when unknown placeholders are detected, including inline localized guidance to resolve unsupported tokens.
+- Added template usage impact panels on Contract/Email template edit pages with new usage-summary APIs (linked records, contracts/quote versions, and message draft references).
+- Added EN/ES template parity checks in Contract/Email template edit flows, including counterpart detection by template key suffix and token-coverage mismatch reporting.
+- Added conditional template section support using [[if field=value]] ... [[endif]] blocks, with quick-insert helpers and context-aware preview rendering for Contract/Email templates.
+- Added template version history for Contract and Email templates, including automatic pre-save snapshots, side-by-side diff view against current content, and one-click rollback via authenticated API endpoints.
+- Added a dedicated Signing Profile settings page for OMDS authorized signer identity details, so contract signature blocks can reference stored legal name and title fields while keeping the actual digital signature system-generated at sign time.
+- Added a Company Profile settings section for legal/branding details (legal name, DBA, address, phone, email, website) that now feeds the shared contract preview/PDF shell and template token rendering.
+- Updated the contract preview and PDF export pipeline to resolve company-profile merge tokens in both the editor preview and downloadable documents.
+
+---
+
+## - 2026-07-24
+### Added
+- Initial technical handoff state captured in `PROJECT_OVERVIEW.md`.
+- Modular Next.js 14 App Router skeleton with Supabase Postgres schema, RLS, and initial feature folders.

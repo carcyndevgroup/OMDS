@@ -1,0 +1,20 @@
+alter table public.venues
+add column if not exists street_address text not null default '',
+add column if not exists area text not null default '',
+add column if not exists city text not null default '',
+add column if not exists state_province text not null default '',
+add column if not exists postal_code text not null default '',
+add column if not exists country text not null default '',
+add column if not exists distance_from_hq_km numeric,
+add column if not exists travel_time_minutes integer,
+add column if not exists google_maps_url text not null default '',
+add column if not exists website_url text not null default '',
+add column if not exists phone text not null default '',
+add column if not exists instagram text not null default '',
+add column if not exists facebook text not null default '',
+add column if not exists payment_billing_type text not null default '',
+add column if not exists commission_notes text not null default '',
+add column if not exists requires_sat_fiscal boolean not null default false,
+add column if not exists internal_status text not null default 'active'
+check (internal_status in ('active', 'inactive')),
+add column if not exists notes text not null default '';

@@ -1,0 +1,10 @@
+-- Run this file after schema migrations are applied.
+-- Recommended order:
+-- 1) questionnaire template defaults
+-- 2) email template defaults
+-- 3) contract template defaults
+--
+-- Execute each referenced file in your SQL runner:
+-- - supabase/seeds/20260725023000_seed_default_questionnaire_templates.sql
+-- - supabase/seeds/20260727021000_seed_default_email_templates.sql
+-- - supabase/seeds/20260727022000_seed_contract_templates.sql

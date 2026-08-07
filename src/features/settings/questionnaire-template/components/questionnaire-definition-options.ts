@@ -1,0 +1,66 @@
+import type { TranslationKey } from "@/core/i18n";
+
+type OptionDefinition = {
+  labelKey: TranslationKey;
+  value: string;
+};
+
+export const questionTypeOptions: OptionDefinition[] = [
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.text", value: "text" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.textarea", value: "textarea" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.email", value: "email" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.phone", value: "phone" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.select", value: "select" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.date", value: "date" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.number", value: "number" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.time", value: "time" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.file", value: "file" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.image", value: "image" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionType.repeatable", value: "repeatable" },
+];
+
+export const questionFieldOptions: OptionDefinition[] = [
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientLegalFirstName", value: "client.legalFirstName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientLegalLastName", value: "client.legalLastName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientAddress", value: "client.address" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientPhone", value: "client.phone" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientInstagram", value: "client.instagram" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientFacebook", value: "client.facebook" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientRole", value: "client.role" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientPreferredCommunication", value: "client.preferredCommunicationMethod" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.clientAdditionalClients", value: "client.additionalClients" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventName", value: "event.eventName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventGuestCount", value: "event.guestCount" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventServiceStartTime", value: "event.serviceStartTime" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventServiceEndTime", value: "event.serviceEndTime" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventMarqueeNames", value: "event.marqueeNames" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventHashtags", value: "event.eventHashtags" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.eventServiceLocation", value: "event.serviceLocationDescription" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueName", value: "venue.name" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueAddress", value: "venue.address" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueContactName", value: "venue.assignedContact.name" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueContactRole", value: "venue.assignedContact.role" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueContactPhone", value: "venue.assignedContact.phone" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venueContactEmail", value: "venue.assignedContact.email" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venuePowerSupply", value: "venue.powerSupplyAccess" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.venuePowerNotes", value: "venue.powerSupplyNotes" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerCompany", value: "planner.company" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerFirstName", value: "planner.firstName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerLastName", value: "planner.lastName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerPhone", value: "planner.phone" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerEmail", value: "planner.email" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerInstagram", value: "planner.instagram" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerFacebook", value: "planner.facebook" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.plannerPrimaryContact", value: "planner.primaryEventContact" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorCompany", value: "coordinator.company" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorFirstName", value: "coordinator.firstName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorLastName", value: "coordinator.lastName" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorPhone", value: "coordinator.phone" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorEmail", value: "coordinator.email" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorInstagram", value: "coordinator.instagram" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorFacebook", value: "coordinator.facebook" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.coordinatorPrimaryContact", value: "coordinator.primaryEventContact" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.additionalSpecialRequests", value: "additional.specialRequests" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.additionalSecondaryContact", value: "additional.secondaryContacts" },
+  { labelKey: "settings.questionnaireTemplate.builder.optionField.additionalOperationalNotes", value: "additional.operationalNotes" },
+];

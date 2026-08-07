@@ -1,0 +1,9 @@
+{
+  "maxLines": 300,
+  "warnLines": 290,
+  "exceptions": {
+    "src/core/i18n/dictionaries/settings-dictionary.ts": 660,
+    "src/core/i18n/dictionaries/crm/quote-dictionary.ts": 308,
+    "src/features/settings/questionnaire-template/utils/questionnaire-definition.ts": 597
+  }
+}

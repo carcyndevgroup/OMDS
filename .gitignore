@@ -1,0 +1,12 @@
+node_modules
+.next
+.env
+.env.local
+.env*.local
+.npm-cache
+*.tsbuildinfo
+.DS_Store
+other_files/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

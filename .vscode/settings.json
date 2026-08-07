@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^sudo chown -R \"\\$USER\":staff /Users/carcyndev/\\.npm$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

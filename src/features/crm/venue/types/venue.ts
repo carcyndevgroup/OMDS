@@ -1,0 +1,76 @@
+import type { CrmRecordMeta } from "../../shared/types/crm-record";
+
+export type Venue = CrmRecordMeta & {
+  area: string;
+  brochureBehavior: string;
+  city: string;
+  commissionFixedAmount: number | null;
+  commissionModel: string;
+  commissionNotes: string;
+  commissionPercentage: number | null;
+  country: string;
+  distanceFromHqKm: number | null;
+  facebook: string;
+  fiscalDefaultBankAccountId: string;
+  fiscalDefaultProfileId: string;
+  googleMapsUrl: string;
+  instagram: string;
+  internalStatus: "active" | "inactive";
+  isPreferredVendor: boolean;
+  name: string;
+  notes: string;
+  facturaRecipient: string;
+  invoiceBehavior: string;
+  paymentBillingType: string;
+  paymentResponsibility: string;
+  phone: string;
+  postalCode: string;
+  quotePricingModel: string;
+  requiresSatFiscal: boolean;
+  settingsNotes: string;
+  stateProvince: string;
+  streetAddress: string;
+  suppressClientInvoice: boolean;
+  travelTimeMinutes: number | null;
+  usesSubLocations: boolean;
+  websiteUrl: string;
+};
+
+export type VenueFormValues = {
+  area: string;
+  city: string;
+  commissionNotes: string;
+  country: string;
+  distanceFromHqKm: string;
+  facebook: string;
+  googleMapsUrl: string;
+  instagram: string;
+  internalStatus: "active" | "inactive";
+  isPreferredVendor: boolean;
+  name: string;
+  notes: string;
+  paymentBillingType: string;
+  phone: string;
+  postalCode: string;
+  requiresSatFiscal: boolean;
+  stateProvince: string;
+  streetAddress: string;
+  travelTimeMinutes: string;
+  usesSubLocations: boolean;
+  websiteUrl: string;
+};
+
+export type VenueSettingsFormValues = {
+  brochureBehavior: string;
+  commissionFixedAmount: string;
+  commissionModel: string;
+  commissionPercentage: string;
+  facturaRecipient: string;
+  fiscalDefaultBankAccountId: string;
+  fiscalDefaultProfileId: string;
+  invoiceBehavior: string;
+  paymentResponsibility: string;
+  quotePricingModel: string;
+  settingsNotes: string;
+  suppressClientInvoice: boolean;
+};

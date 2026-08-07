@@ -1,0 +1,10 @@
+-- Template defaults policy notes
+--
+-- This file is intentionally documentation-only SQL comments for now.
+--
+-- Historical seed rows already exist in timestamped migrations:
+-- - questionnaire template defaults
+-- - email template defaults
+--
+-- Going forward, add template bootstrap/upsert SQL files under this folder
+-- and execute them as an explicit seed step after schema migrations.

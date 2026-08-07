@@ -1,0 +1,33 @@
+export const settingsSigningProfileEn = {
+  "settings.signingProfile.action.back": "Back",
+  "settings.signingProfile.action.save": "Save Profile",
+  "settings.signingProfile.card.subtitle": "Store the OMDS signing authority name and title used in contract signatures.",
+  "settings.signingProfile.card.title": "Signing Profile",
+  "settings.signingProfile.field.authorizedSignerFullName": "Authorized Signer Full Legal Name",
+  "settings.signingProfile.field.authorizedSignerTitle": "Authorized Signer Title",
+  "settings.signingProfile.loadError": "We could not load the signing profile.",
+  "settings.signingProfile.loading": "Loading signing profile...",
+  "settings.signingProfile.message.error": "We could not save the signing profile.",
+  "settings.signingProfile.message.success": "Signing profile saved.",
+  "settings.signingProfile.note": "The signature token itself is generated at signing time. This profile stores the OMDS identity details used in contracts and previews.",
+  "settings.signingProfile.subtitle": "Maintain the authorized signing authority details that appear in contract signature blocks.",
+  "settings.signingProfile.title": "Signing Profile",
+  "settings.signingProfile.validation.required": "This field is required.",
+} as const;
+
+export const settingsSigningProfileEs = {
+  "settings.signingProfile.action.back": "Atrás",
+  "settings.signingProfile.action.save": "Guardar Perfil",
+  "settings.signingProfile.card.subtitle": "Guarda el nombre y cargo de la autoridad firmante de OMDS usados en contratos.",
+  "settings.signingProfile.card.title": "Perfil de Firma",
+  "settings.signingProfile.field.authorizedSignerFullName": "Nombre Legal Completo del Firmante Autorizado",
+  "settings.signingProfile.field.authorizedSignerTitle": "Cargo del Firmante Autorizado",
+  "settings.signingProfile.loadError": "No pudimos cargar el perfil de firma.",
+  "settings.signingProfile.loading": "Cargando perfil de firma...",
+  "settings.signingProfile.message.error": "No pudimos guardar el perfil de firma.",
+  "settings.signingProfile.message.success": "Perfil de firma guardado.",
+  "settings.signingProfile.note": "El token de firma se genera al momento de firmar. Este perfil guarda los datos de identidad de OMDS usados en contratos y vistas previas.",
+  "settings.signingProfile.subtitle": "Mantén los datos de la autoridad firmante que aparecen en los bloques de firma de contratos.",
+  "settings.signingProfile.title": "Perfil de Firma",
+  "settings.signingProfile.validation.required": "Este campo es obligatorio.",
+} as const;

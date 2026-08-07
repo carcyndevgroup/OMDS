@@ -1,0 +1,43 @@
+export const eventFilesEn = {
+  "crm.event.detail.placeholder.filesBody": "Event files, layouts, maps, and operations documents will be managed here.",
+  "crm.event.detail.placeholder.filesTitle": "Files",
+  "crm.event.detail.tab.files": "Files",
+  "crm.event.files.action.add": "Add File",
+  "crm.event.files.action.remove": "Remove",
+  "crm.event.files.empty": "No files have been added to this event.",
+  "crm.event.files.field.includeOnRunSheet": "Include on Run Sheet",
+  "crm.event.files.field.name": "File Name",
+  "crm.event.files.field.notes": "Notes",
+  "crm.event.files.field.url": "File URL",
+  "crm.event.files.loadError": "We could not load event files.",
+  "crm.event.files.loading": "Loading files...",
+  "crm.event.files.placeholder.notes": "Add layout notes, access context, or usage instructions.",
+  "crm.event.files.status.included": "Included on run sheet",
+  "crm.event.files.status.notIncluded": "Not included on run sheet",
+  "crm.event.files.title": "Files to Include",
+  "crm.event.files.validation.required": "This field is required.",
+  "crm.event.runSheet.section.files": "Files to Include",
+} as const;
+
+export type EventFilesTranslationKey = keyof typeof eventFilesEn;
+
+export const eventFilesEs = {
+  "crm.event.detail.placeholder.filesBody": "Archivos del evento, layouts, mapas y documentos de operación se gestionarán aquí.",
+  "crm.event.detail.placeholder.filesTitle": "Archivos",
+  "crm.event.detail.tab.files": "Archivos",
+  "crm.event.files.action.add": "Agregar Archivo",
+  "crm.event.files.action.remove": "Quitar",
+  "crm.event.files.empty": "No se han agregado archivos a este evento.",
+  "crm.event.files.field.includeOnRunSheet": "Incluir en Run Sheet",
+  "crm.event.files.field.name": "Nombre del Archivo",
+  "crm.event.files.field.notes": "Notas",
+  "crm.event.files.field.url": "URL del Archivo",
+  "crm.event.files.loadError": "No pudimos cargar los archivos del evento.",
+  "crm.event.files.loading": "Cargando archivos...",
+  "crm.event.files.placeholder.notes": "Agrega notas de layout, acceso o instrucciones de uso.",
+  "crm.event.files.status.included": "Incluido en run sheet",
+  "crm.event.files.status.notIncluded": "No incluido en run sheet",
+  "crm.event.files.title": "Archivos a Incluir",
+  "crm.event.files.validation.required": "Este campo es obligatorio.",
+  "crm.event.runSheet.section.files": "Archivos a incluir",
+} satisfies Record<EventFilesTranslationKey, string>;

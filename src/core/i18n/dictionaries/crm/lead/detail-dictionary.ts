@@ -1,0 +1,43 @@
+export const leadDetailEn = {
+  "crm.lead.detail.action.convert": "Convert to client",
+  "crm.lead.detail.action.edit": "Edit",
+  "crm.lead.detail.empty.messages": "No messages yet.",
+  "crm.lead.detail.empty.notes": "No notes have been added.",
+  "crm.lead.detail.empty.services": "No services selected.",
+  "crm.lead.detail.label.inquiryDate": "Inquiry date",
+  "crm.lead.detail.loadError": "We could not load this lead.",
+  "crm.lead.detail.loading": "Loading lead...",
+  "crm.lead.detail.section.venue": "Venue Details",
+  "crm.lead.detail.tab.messages": "Messages",
+  "crm.lead.detail.tab.notes": "Notes",
+  "crm.lead.detail.tab.overview": "Overview",
+  "crm.lead.edit.error": "We could not update this lead.",
+  "crm.lead.edit.save": "Save changes",
+  "crm.lead.edit.saving": "Saving changes...",
+  "crm.lead.edit.subtitle": "Update the approved lead details and CRM status.",
+  "crm.lead.edit.success": "Lead updated.",
+  "crm.lead.edit.title": "Edit Lead",
+} as const;
+
+export type LeadDetailTranslationKey = keyof typeof leadDetailEn;
+
+export const leadDetailEs: Record<LeadDetailTranslationKey, string> = {
+  "crm.lead.detail.action.convert": "Convertir en cliente",
+  "crm.lead.detail.action.edit": "Editar",
+  "crm.lead.detail.empty.messages": "Aún no hay mensajes.",
+  "crm.lead.detail.empty.notes": "No se han agregado notas.",
+  "crm.lead.detail.empty.services": "No hay servicios seleccionados.",
+  "crm.lead.detail.label.inquiryDate": "Fecha de consulta",
+  "crm.lead.detail.loadError": "No pudimos cargar este lead.",
+  "crm.lead.detail.loading": "Cargando lead...",
+  "crm.lead.detail.section.venue": "Detalles del venue",
+  "crm.lead.detail.tab.messages": "Mensajes",
+  "crm.lead.detail.tab.notes": "Notas",
+  "crm.lead.detail.tab.overview": "Resumen",
+  "crm.lead.edit.error": "No pudimos actualizar este lead.",
+  "crm.lead.edit.save": "Guardar cambios",
+  "crm.lead.edit.saving": "Guardando cambios...",
+  "crm.lead.edit.subtitle": "Actualiza los detalles aprobados y el estado del lead.",
+  "crm.lead.edit.success": "Lead actualizado.",
+  "crm.lead.edit.title": "Editar lead",
+};
