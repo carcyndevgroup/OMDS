@@ -45,7 +45,10 @@ export class ImapSmtpEmailAdapter implements EmailAdapter {
       const lock = await client.getMailboxLock("INBOX");
       try {
         const minimumUid = Number(cursor ?? "0");
-        const range = minimumUid > 0 ? `${minimumUid + 1}:*` : "1:*";
+        const mailbox = client.mailbox;
+        const newestUid = mailbox && typeof mailbox !== "boolean" ? (mailbox.uidNext ?? 1) - 1 : 0;
+        const firstUid = Math.max(1, newestUid - maxEmailsPerSync + 1);
+        const range = minimumUid > 0 ? `${minimumUid + 1}:*` : `${firstUid}:*`;
         let maximumUid = minimumUid;
         for await (const message of client.fetch(range, { source: true, uid: true }, { uid: true })) {
           if (!message.source) continue;

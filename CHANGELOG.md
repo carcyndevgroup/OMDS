@@ -15,6 +15,7 @@ All notable changes to the Oh My Desserts & Snacks web application will be docum
 - Fixed initial IMAP sync to import the complete inbox instead of only the newest email; later syncs remain cursor-based.
 - Limited each IMAP sync request to 50 emails so large Zoho inboxes import in repeatable cursor-based batches.
 - Fixed the Messages sync control to exit its loading state when the browser request fails or is interrupted after server-side import completes.
+- Changed the initial 50-email test batch to start with the newest Zoho mailbox messages instead of the oldest.
 - Added an immutable shared CRM activity log foundation with Lead and Client overview panels, secure reads, and atomic archive/restore entries.
 - Added automatic Lead and Client creation/update activity entries, including linked client event creation.
 - Added Client Log activity entries for linked quote, contract, invoice, and message creation.

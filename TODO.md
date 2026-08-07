@@ -12,6 +12,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Run mailbox sync again after the initial-range fix to import historical inbox mail and verify duplicate protection.
 - [ ] Repeat mailbox sync until the Zoho inbox is fully imported after the 50-email batch limit.
 - [ ] Confirm the sync button reports completion without requiring a browser refresh.
+- [ ] Confirm the initial test batch shows current Zoho messages, then decide whether historical backfill should remain available.
 - [ ] Apply `20260807060000_grant_unified_messages_access.sql` in the connected Supabase project before retesting Messages.
 - [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
 - [ ] Test direct booking flow from client creation through confirmed event. *(Re-test contract creation path after resolver fallback fix.)*
