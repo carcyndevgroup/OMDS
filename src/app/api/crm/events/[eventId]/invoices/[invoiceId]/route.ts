@@ -4,12 +4,13 @@ import { createInvoiceApiService } from "@/features/crm/invoice/services/invoice
 import type { InvoiceAction } from "@/features/crm/invoice/types/invoice";
 
 type InvoiceRouteContext = {
-  params: { eventId: string; invoiceId: string };
+  params: Promise<{ eventId: string; invoiceId: string }>;
 };
 
 const actions = new Set<InvoiceAction>(["pay", "promise", "void"]);
 
-export async function PATCH(request: Request, { params }: InvoiceRouteContext) {
+export async function PATCH(request: Request, props: InvoiceRouteContext) {
+  const params = await props.params;
   const service = await createInvoiceApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

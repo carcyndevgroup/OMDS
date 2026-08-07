@@ -4,10 +4,11 @@ import { parseEventPlannerFormValues } from "@/features/crm/planner/schemas/even
 import { createEventPlannerApiService } from "@/features/crm/planner/services/event-planner-api-service";
 
 type EventPlannerRouteContext = {
-  params: { eventId: string; eventPlannerId: string };
+  params: Promise<{ eventId: string; eventPlannerId: string }>;
 };
 
-export async function DELETE(_: Request, { params }: EventPlannerRouteContext) {
+export async function DELETE(_: Request, props: EventPlannerRouteContext) {
+  const params = await props.params;
   const service = await createEventPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -15,7 +16,8 @@ export async function DELETE(_: Request, { params }: EventPlannerRouteContext) {
   return new NextResponse(null, { status: 204 });
 }
 
-export async function PUT(request: Request, { params }: EventPlannerRouteContext) {
+export async function PUT(request: Request, props: EventPlannerRouteContext) {
+  const params = await props.params;
   const service = await createEventPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

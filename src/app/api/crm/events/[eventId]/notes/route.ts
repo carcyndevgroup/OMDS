@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server-client";
 import { updateEventNotes } from "@/features/crm/event/services/event-notes-service";
 
-type EventNotesRouteContext = { params: { eventId: string } };
+type EventNotesRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function PUT(request: Request, { params }: EventNotesRouteContext) {
+export async function PUT(request: Request, props: EventNotesRouteContext) {
+  const params = await props.params;
   const client = await createServerSupabaseClient();
   const {
     data: { user },

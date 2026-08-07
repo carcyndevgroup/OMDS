@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createContractTemplateApiService } from "@/features/settings/contract-template/services/contract-template-api-service";
 
-type ContractTemplateRollbackRouteContext = { params: { id: string; versionId: string } };
+type ContractTemplateRollbackRouteContext = { params: Promise<{ id: string; versionId: string }> };
 
-export async function POST(_: Request, { params }: ContractTemplateRollbackRouteContext) {
+export async function POST(_: Request, props: ContractTemplateRollbackRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

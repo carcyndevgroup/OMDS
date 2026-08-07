@@ -4,16 +4,18 @@ import { parseEventFileFormValues } from "@/features/crm/files/schemas/event-fil
 import { validateEventFileForm } from "@/features/crm/files/schemas/event-file-schema";
 import { createEventFileApiService } from "@/features/crm/files/services/event-file-api-service";
 
-type EventFilesRouteContext = { params: { eventId: string } };
+type EventFilesRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventFilesRouteContext) {
+export async function GET(_: Request, props: EventFilesRouteContext) {
+  const params = await props.params;
   const service = await createEventFileApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: EventFilesRouteContext) {
+export async function POST(request: Request, props: EventFilesRouteContext) {
+  const params = await props.params;
   const service = await createEventFileApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

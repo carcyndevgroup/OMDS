@@ -4,19 +4,18 @@ import { parseEventCommissionValues } from "@/features/crm/financials/schemas/ev
 import { validateEventCommission } from "@/features/crm/financials/schemas/event-commission-schema";
 import { createEventCommissionApiService } from "@/features/crm/financials/services/event-commission-api-service";
 
-type EventCommissionRouteContext = { params: { eventId: string } };
+type EventCommissionRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventCommissionRouteContext) {
+export async function GET(_: Request, props: EventCommissionRouteContext) {
+  const params = await props.params;
   const service = await createEventCommissionApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(
-  request: Request,
-  { params }: EventCommissionRouteContext,
-) {
+export async function POST(request: Request, props: EventCommissionRouteContext) {
+  const params = await props.params;
   const service = await createEventCommissionApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

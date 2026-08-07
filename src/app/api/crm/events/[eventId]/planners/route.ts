@@ -3,16 +3,18 @@ import { NextResponse } from "next/server";
 import { parseEventPlannerFormValues } from "@/features/crm/planner/schemas/event-planner-parser";
 import { createEventPlannerApiService } from "@/features/crm/planner/services/event-planner-api-service";
 
-type EventPlannersRouteContext = { params: { eventId: string } };
+type EventPlannersRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventPlannersRouteContext) {
+export async function GET(_: Request, props: EventPlannersRouteContext) {
+  const params = await props.params;
   const service = await createEventPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.listByEvent(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: EventPlannersRouteContext) {
+export async function POST(request: Request, props: EventPlannersRouteContext) {
+  const params = await props.params;
   const service = await createEventPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

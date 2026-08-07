@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createServerSupabaseClient } from "@/core/supabase/server-client";
 
-type Context = { params: { id: string } };
+type Context = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: Context) {
+export async function GET(_: Request, props: Context) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const user = await database.auth.getUser();
   if (user.error || !user.data.user) {
@@ -29,7 +30,8 @@ export async function GET(_: Request, { params }: Context) {
   return NextResponse.json({ data: { messages: messages.data, thread: thread.data } });
 }
 
-export async function PATCH(_: Request, { params }: Context) {
+export async function PATCH(_: Request, props: Context) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const user = await database.auth.getUser();
   if (user.error || !user.data.user) return NextResponse.json({ code: "unauthorized" }, { status: 401 });

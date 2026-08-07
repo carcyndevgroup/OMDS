@@ -8,9 +8,10 @@ import {
 } from "@/features/sat-facturas/schemas/sat-workflow-schema";
 import { createSatFacturaApiService } from "@/features/sat-facturas/services/sat-factura-api-service";
 
-type SatFacturaRouteContext = { params: { id: string } };
+type SatFacturaRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: SatFacturaRouteContext) {
+export async function GET(_: Request, props: SatFacturaRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -20,7 +21,8 @@ export async function GET(_: Request, { params }: SatFacturaRouteContext) {
   return NextResponse.json({ data: factura });
 }
 
-export async function PUT(request: Request, { params }: SatFacturaRouteContext) {
+export async function PUT(request: Request, props: SatFacturaRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -40,7 +42,8 @@ export async function PUT(request: Request, { params }: SatFacturaRouteContext) 
   return NextResponse.json({ data: await service.updateFactura(params.id, values) });
 }
 
-export async function PATCH(request: Request, { params }: SatFacturaRouteContext) {
+export async function PATCH(request: Request, props: SatFacturaRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

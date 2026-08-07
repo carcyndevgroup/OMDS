@@ -4,19 +4,18 @@ import { parseEventStaffPayrollValues } from "@/features/crm/financials/schemas/
 import { validateEventStaffPayroll } from "@/features/crm/financials/schemas/event-staff-payroll-schema";
 import { createEventStaffPayrollApiService } from "@/features/crm/financials/services/event-staff-payroll-api-service";
 
-type EventStaffPayrollRouteContext = { params: { eventId: string } };
+type EventStaffPayrollRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventStaffPayrollRouteContext) {
+export async function GET(_: Request, props: EventStaffPayrollRouteContext) {
+  const params = await props.params;
   const service = await createEventStaffPayrollApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(
-  request: Request,
-  { params }: EventStaffPayrollRouteContext,
-) {
+export async function POST(request: Request, props: EventStaffPayrollRouteContext) {
+  const params = await props.params;
   const service = await createEventStaffPayrollApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -5,16 +5,18 @@ import { validateQuoteCreate } from "@/features/crm/quote/schemas/quote-schema";
 import { createQuoteApiService } from "@/features/crm/quote/services/quote-api-service";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
-type QuotesRouteContext = { params: { eventId: string } };
+type QuotesRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: QuotesRouteContext) {
+export async function GET(_: Request, props: QuotesRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: QuotesRouteContext) {
+export async function POST(request: Request, props: QuotesRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -4,9 +4,10 @@ import { parsePaymentPlanFormValues } from "@/features/settings/payment-plan/sch
 import { validatePaymentPlanForm } from "@/features/settings/payment-plan/schemas/payment-plan-schema";
 import { createPaymentPlanApiService } from "@/features/settings/payment-plan/services/payment-plan-api-service";
 
-type PaymentPlanRouteContext = { params: { id: string } };
+type PaymentPlanRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: PaymentPlanRouteContext) {
+export async function GET(_: Request, props: PaymentPlanRouteContext) {
+  const params = await props.params;
   const service = await createPaymentPlanApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: PaymentPlanRouteContext) {
     : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: PaymentPlanRouteContext) {
+export async function PUT(request: Request, props: PaymentPlanRouteContext) {
+  const params = await props.params;
   const service = await createPaymentPlanApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

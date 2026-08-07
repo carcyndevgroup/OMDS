@@ -5,7 +5,8 @@ import { createSatFacturaApiService } from "@/features/sat-facturas/services/sat
 
 const actions = new Set(["received", "requested", "sent"]);
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

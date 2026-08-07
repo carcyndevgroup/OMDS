@@ -4,7 +4,7 @@ import { createQuestionnaireApiService } from "@/features/crm/questionnaire/serv
 import type { QuestionnaireAction } from "@/features/crm/questionnaire/types/questionnaire";
 
 type QuestionnaireRouteContext = {
-  params: { eventId: string; questionnaireId: string };
+  params: Promise<{ eventId: string; questionnaireId: string }>;
 };
 
 const actions = new Set<QuestionnaireAction>([
@@ -15,7 +15,8 @@ const actions = new Set<QuestionnaireAction>([
   "submit",
 ]);
 
-export async function PATCH(request: Request, { params }: QuestionnaireRouteContext) {
+export async function PATCH(request: Request, props: QuestionnaireRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

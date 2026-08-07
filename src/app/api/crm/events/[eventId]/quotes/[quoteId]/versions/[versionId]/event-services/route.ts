@@ -3,13 +3,11 @@ import { NextResponse } from "next/server";
 import { createQuoteApiService } from "@/features/crm/quote/services/quote-api-service";
 
 type QuoteEventServicesRouteContext = {
-  params: { eventId: string; quoteId: string; versionId: string };
+  params: Promise<{ eventId: string; quoteId: string; versionId: string }>;
 };
 
-export async function POST(
-  _request: Request,
-  { params }: QuoteEventServicesRouteContext,
-) {
+export async function POST(_request: Request, props: QuoteEventServicesRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createContractTemplateApiService } from "@/features/settings/contract-template/services/contract-template-api-service";
 
-type ContractTemplateUsageRouteContext = { params: { id: string } };
+type ContractTemplateUsageRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: ContractTemplateUsageRouteContext) {
+export async function GET(_: Request, props: ContractTemplateUsageRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

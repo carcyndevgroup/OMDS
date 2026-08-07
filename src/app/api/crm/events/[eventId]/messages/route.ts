@@ -4,16 +4,18 @@ import { createMessageDraftApiService } from "@/features/crm/messages/services/m
 import type { MessageDraftCreateInput } from "@/features/crm/messages/types/message-draft";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
-type MessagesRouteContext = { params: { eventId: string } };
+type MessagesRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: MessagesRouteContext) {
+export async function GET(_: Request, props: MessagesRouteContext) {
+  const params = await props.params;
   const service = await createMessageDraftApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: MessagesRouteContext) {
+export async function POST(request: Request, props: MessagesRouteContext) {
+  const params = await props.params;
   const service = await createMessageDraftApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

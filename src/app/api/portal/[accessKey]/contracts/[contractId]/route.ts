@@ -6,10 +6,11 @@ import { getPublicClientPortalAccess } from "@/features/crm/portal/repositories/
 import { listPublicPortalContracts } from "@/features/crm/portal/repositories/public-portal-documents-repository";
 
 type ContractRouteContext = {
-  params: { accessKey: string; contractId: string };
+  params: Promise<{ accessKey: string; contractId: string }>;
 };
 
-export async function PATCH(request: Request, { params }: ContractRouteContext) {
+export async function PATCH(request: Request, props: ContractRouteContext) {
+  const params = await props.params;
   const database = createAdminSupabaseClient();
   const portal = await getPublicClientPortalAccess(database, params.accessKey);
 

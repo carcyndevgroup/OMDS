@@ -18,10 +18,11 @@ function getCodeFallbackBody(templateKey: string | null, bookingType?: string | 
 }
 
 type ContractPdfRouteContext = {
-  params: { contractId: string; eventId: string };
+  params: Promise<{ contractId: string; eventId: string }>;
 };
 
-export async function GET(request: Request, { params }: ContractPdfRouteContext) {
+export async function GET(request: Request, props: ContractPdfRouteContext) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const {
     data: { user },

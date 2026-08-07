@@ -4,7 +4,7 @@ import { createServerSupabaseClient } from "@/core/supabase/server-client";
 import { listPublicPortalQuestionnaires } from "@/features/crm/portal/repositories/client-portal-repository";
 
 type PublicQuestionnaireUploadRouteContext = {
-  params: { accessKey: string; questionnaireId: string };
+  params: Promise<{ accessKey: string; questionnaireId: string }>;
 };
 
 type UploadedQuestionnaireFile = {
@@ -36,10 +36,8 @@ async function canAccessQuestionnaireUploads(accessKey: string, questionnaireId:
   return { allowed, database };
 }
 
-export async function POST(
-  request: Request,
-  { params }: PublicQuestionnaireUploadRouteContext,
-) {
+export async function POST(request: Request, props: PublicQuestionnaireUploadRouteContext) {
+  const params = await props.params;
   const formData = await request.formData().catch(() => null);
   if (!formData) {
     return NextResponse.json({ code: "invalid_form_data" }, { status: 400 });
@@ -93,10 +91,8 @@ export async function POST(
   return NextResponse.json({ data: payload, signedUrl: signedUrlResult.data?.signedUrl ?? null });
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: PublicQuestionnaireUploadRouteContext,
-) {
+export async function DELETE(request: Request, props: PublicQuestionnaireUploadRouteContext) {
+  const params = await props.params;
   let body: unknown;
 
   try {

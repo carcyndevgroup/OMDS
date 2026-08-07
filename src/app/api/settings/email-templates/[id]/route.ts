@@ -8,9 +8,10 @@ import {
   TEMPLATE_IN_USE_DELETE_FORBIDDEN,
 } from "@/features/settings/email-template/repositories/email-template-repository";
 
-type EmailTemplateRouteContext = { params: { id: string } };
+type EmailTemplateRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: EmailTemplateRouteContext) {
+export async function GET(_: Request, props: EmailTemplateRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -18,7 +19,8 @@ export async function GET(_: Request, { params }: EmailTemplateRouteContext) {
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: EmailTemplateRouteContext) {
+export async function PUT(request: Request, props: EmailTemplateRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -37,7 +39,8 @@ export async function PUT(request: Request, { params }: EmailTemplateRouteContex
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PATCH(request: Request, { params }: EmailTemplateRouteContext) {
+export async function PATCH(request: Request, props: EmailTemplateRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -61,7 +64,8 @@ export async function PATCH(request: Request, { params }: EmailTemplateRouteCont
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function DELETE(_: Request, { params }: EmailTemplateRouteContext) {
+export async function DELETE(_: Request, props: EmailTemplateRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

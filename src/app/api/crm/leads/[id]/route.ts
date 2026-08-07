@@ -5,14 +5,15 @@ import { parseLeadFormValues } from "@/features/crm/lead/schemas/lead-form-parse
 import { createLeadApiService } from "@/features/crm/lead/services/lead-api-service";
 
 type LeadRouteContext = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 const unauthorizedResponse = () => {
   return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 };
 
-export async function GET(_: Request, { params }: LeadRouteContext) {
+export async function GET(_: Request, props: LeadRouteContext) {
+  const params = await props.params;
   const service = await createLeadApiService();
   if (!service) return unauthorizedResponse();
 
@@ -25,7 +26,8 @@ export async function GET(_: Request, { params }: LeadRouteContext) {
   return NextResponse.json({ data: lead });
 }
 
-export async function DELETE(_: Request, { params }: LeadRouteContext) {
+export async function DELETE(_: Request, props: LeadRouteContext) {
+  const params = await props.params;
   const service = await createLeadApiService();
   if (!service) return unauthorizedResponse();
 
@@ -38,10 +40,8 @@ export async function DELETE(_: Request, { params }: LeadRouteContext) {
   return new NextResponse(null, { status: 204 });
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: LeadRouteContext,
-) {
+export async function PUT(request: NextRequest, props: LeadRouteContext) {
+  const params = await props.params;
   const service = await createLeadApiService();
   if (!service) return unauthorizedResponse();
 

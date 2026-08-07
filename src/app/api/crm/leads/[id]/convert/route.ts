@@ -5,13 +5,11 @@ import { parseClientFormValues } from "@/features/crm/client/schemas/client-pars
 import { createClientApiService } from "@/features/crm/client/services/client-api-service";
 
 type ConvertLeadRouteContext = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export async function POST(
-  request: NextRequest,
-  { params }: ConvertLeadRouteContext,
-) {
+export async function POST(request: NextRequest, props: ConvertLeadRouteContext) {
+  const params = await props.params;
   const service = await createClientApiService();
 
   if (!service) {

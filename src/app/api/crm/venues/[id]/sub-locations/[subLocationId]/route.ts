@@ -5,13 +5,11 @@ import { validateVenueSubLocationForm } from "@/features/crm/venue/schemas/venue
 import { createVenueSubLocationApiService } from "@/features/crm/venue/services/venue-sub-location-api-service";
 
 type VenueSubLocationRouteContext = {
-  params: { id: string; subLocationId: string };
+  params: Promise<{ id: string; subLocationId: string }>;
 };
 
-export async function PUT(
-  request: Request,
-  { params }: VenueSubLocationRouteContext,
-) {
+export async function PUT(request: Request, props: VenueSubLocationRouteContext) {
+  const params = await props.params;
   const service = await createVenueSubLocationApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -7,12 +7,13 @@ import {
 } from "@/features/crm/questionnaire/repositories/questionnaire-upload-repository";
 
 type UploadDeleteRouteContext = {
-  params: { eventId: string; questionnaireId: string };
+  params: Promise<{ eventId: string; questionnaireId: string }>;
 };
 
 const BUCKET = "portal-questionnaire-uploads";
 
-export async function DELETE(request: Request, { params }: UploadDeleteRouteContext) {
+export async function DELETE(request: Request, props: UploadDeleteRouteContext) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const {
     data: { user },

@@ -4,9 +4,10 @@ import { parseQuestionnaireFieldCatalogFormValues } from "@/features/settings/qu
 import { validateQuestionnaireFieldCatalogForm } from "@/features/settings/questionnaire-template/catalog/schemas/questionnaire-field-catalog-schema";
 import { createQuestionnaireFieldCatalogApiService } from "@/features/settings/questionnaire-template/catalog/services/questionnaire-field-catalog-api-service";
 
-type QuestionnaireFieldCatalogRouteContext = { params: { id: string } };
+type QuestionnaireFieldCatalogRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: QuestionnaireFieldCatalogRouteContext) {
+export async function GET(_: Request, props: QuestionnaireFieldCatalogRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireFieldCatalogApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -14,7 +15,8 @@ export async function GET(_: Request, { params }: QuestionnaireFieldCatalogRoute
   return item ? NextResponse.json({ data: item }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: QuestionnaireFieldCatalogRouteContext) {
+export async function PUT(request: Request, props: QuestionnaireFieldCatalogRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireFieldCatalogApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

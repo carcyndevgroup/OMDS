@@ -33,16 +33,17 @@ import { DIRECT_CONTRACT_DEFAULT_BODY, PV_CONTRACT_DEFAULT_BODY } from "@/featur
 type DocumentKind = "contract" | "invoice" | "questionnaire" | "quote";
 
 type PublicDocumentPdfRouteContext = {
-  params: {
+  params: Promise<{
     accessKey: string;
     documentId: string;
     documentKind: string;
-  };
+  }>;
 };
 
 const allowedKinds = new Set<DocumentKind>(["contract", "invoice", "questionnaire", "quote"]);
 
-export async function GET(request: Request, { params }: PublicDocumentPdfRouteContext) {
+export async function GET(request: Request, props: PublicDocumentPdfRouteContext) {
+  const params = await props.params;
   if (!allowedKinds.has(params.documentKind as DocumentKind)) {
     return NextResponse.json({ code: "invalid_document_kind" }, { status: 400 });
   }

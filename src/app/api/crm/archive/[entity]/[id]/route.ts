@@ -11,9 +11,9 @@ type Entity = keyof typeof entities;
 
 export async function GET(
   _request: Request,
-  context: { params: { entity: string; id: string } },
+  context: { params: Promise<{ entity: string; id: string }> },
 ) {
-  const entity = context.params.entity as Entity;
+  const entity = (await context.params).entity as Entity;
   if (!(entity in entities)) {
     return NextResponse.json({ code: "invalid_entity" }, { status: 400 });
   }
@@ -26,7 +26,7 @@ export async function GET(
     .from("crm_archive_audit_events")
     .select("archived, changed_by, created_at")
     .eq("entity", entity)
-    .eq("record_id", context.params.id)
+    .eq("record_id", (await context.params).id)
     .order("created_at", { ascending: false });
   if (result.error) {
     return NextResponse.json({ code: "archive_audit_load_failed" }, { status: 500 });
@@ -36,9 +36,9 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  context: { params: { entity: string; id: string } },
+  context: { params: Promise<{ entity: string; id: string }> },
 ) {
-  const entity = context.params.entity as Entity;
+  const entity = (await context.params).entity as Entity;
   if (!(entity in entities)) {
     return NextResponse.json({ code: "invalid_entity" }, { status: 400 });
   }
@@ -75,7 +75,7 @@ export async function PATCH(
   const result = await client.rpc("set_crm_archive_state", {
     target_archived: body.archived,
     target_entity: entity,
-    target_record_id: context.params.id,
+    target_record_id: (await context.params).id,
   });
 
   if (result.error) {

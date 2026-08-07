@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { parsePlannerFormValues } from "@/features/crm/planner/schemas/planner-parser";
 import { createPlannerApiService } from "@/features/crm/planner/services/planner-api-service";
 
-type PlannerRouteContext = { params: { id: string } };
+type PlannerRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: PlannerRouteContext) {
+export async function GET(_: Request, props: PlannerRouteContext) {
+  const params = await props.params;
   const service = await createPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -15,7 +16,8 @@ export async function GET(_: Request, { params }: PlannerRouteContext) {
     : NextResponse.json({ code: "planner_not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: PlannerRouteContext) {
+export async function PUT(request: Request, props: PlannerRouteContext) {
+  const params = await props.params;
   const service = await createPlannerApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

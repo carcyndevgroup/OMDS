@@ -20,11 +20,11 @@ import {
 type DocumentKind = "contract" | "invoice" | "questionnaire" | "quote";
 
 type PortalDocumentPageProps = {
-  params: {
+  params: Promise<{
     accessKey: string;
     documentId: string;
     documentKind: string;
-  };
+  }>;
 };
 
 const allowedKinds = new Set<DocumentKind>(["contract", "invoice", "questionnaire", "quote"]);
@@ -33,7 +33,8 @@ export const metadata = {
   title: translations.en["public.portal.heading"],
 };
 
-export default async function PortalDocumentPage({ params }: PortalDocumentPageProps) {
+export default async function PortalDocumentPage(props: PortalDocumentPageProps) {
+  const params = await props.params;
   if (!allowedKinds.has(params.documentKind as DocumentKind)) notFound();
 
   const database = await createServerSupabaseClient();

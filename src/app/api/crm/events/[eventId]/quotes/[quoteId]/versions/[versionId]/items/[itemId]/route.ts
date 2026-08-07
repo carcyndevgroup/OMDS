@@ -6,15 +6,16 @@ import { createQuoteApiService } from "@/features/crm/quote/services/quote-api-s
 import type { QuoteMoveDirection } from "@/features/crm/quote/types/quote";
 
 type QuoteItemRouteContext = {
-  params: {
+  params: Promise<{
     eventId: string;
     itemId: string;
     quoteId: string;
     versionId: string;
-  };
+  }>;
 };
 
-export async function DELETE(_: Request, { params }: QuoteItemRouteContext) {
+export async function DELETE(_: Request, props: QuoteItemRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -22,7 +23,8 @@ export async function DELETE(_: Request, { params }: QuoteItemRouteContext) {
   return NextResponse.json({ data: true });
 }
 
-export async function PATCH(request: Request, { params }: QuoteItemRouteContext) {
+export async function PATCH(request: Request, props: QuoteItemRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -49,7 +51,8 @@ export async function PATCH(request: Request, { params }: QuoteItemRouteContext)
   return NextResponse.json({ data: true });
 }
 
-export async function PUT(request: Request, { params }: QuoteItemRouteContext) {
+export async function PUT(request: Request, props: QuoteItemRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

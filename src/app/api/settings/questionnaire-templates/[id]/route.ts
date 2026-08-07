@@ -8,9 +8,10 @@ import {
   TEMPLATE_IN_USE_DELETE_FORBIDDEN,
 } from "@/features/settings/questionnaire-template/repositories/questionnaire-template-repository";
 
-type QuestionnaireTemplateRouteContext = { params: { id: string } };
+type QuestionnaireTemplateRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: QuestionnaireTemplateRouteContext) {
+export async function GET(_: Request, props: QuestionnaireTemplateRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -18,7 +19,8 @@ export async function GET(_: Request, { params }: QuestionnaireTemplateRouteCont
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: QuestionnaireTemplateRouteContext) {
+export async function PUT(request: Request, props: QuestionnaireTemplateRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -37,7 +39,8 @@ export async function PUT(request: Request, { params }: QuestionnaireTemplateRou
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PATCH(request: Request, { params }: QuestionnaireTemplateRouteContext) {
+export async function PATCH(request: Request, props: QuestionnaireTemplateRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -61,7 +64,8 @@ export async function PATCH(request: Request, { params }: QuestionnaireTemplateR
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function DELETE(_: Request, { params }: QuestionnaireTemplateRouteContext) {
+export async function DELETE(_: Request, props: QuestionnaireTemplateRouteContext) {
+  const params = await props.params;
   const service = await createQuestionnaireTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

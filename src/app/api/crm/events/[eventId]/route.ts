@@ -5,9 +5,10 @@ import { createEventApiService } from "@/features/crm/event/services/event-api-s
 import { updateEventOverview } from "@/features/crm/event/repositories/event-repository";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
-type EventRouteContext = { params: { eventId: string } };
+type EventRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventRouteContext) {
+export async function GET(_: Request, props: EventRouteContext) {
+  const params = await props.params;
   const service = await createEventApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -17,7 +18,8 @@ export async function GET(_: Request, { params }: EventRouteContext) {
   return NextResponse.json({ data: event });
 }
 
-export async function PUT(request: Request, { params }: EventRouteContext) {
+export async function PUT(request: Request, props: EventRouteContext) {
+  const params = await props.params;
   const client = await createServerSupabaseClient();
   const {
     data: { user },

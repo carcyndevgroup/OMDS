@@ -4,19 +4,18 @@ import { parseEventEquipmentFormValues } from "@/features/crm/equipment/schemas/
 import { validateEventEquipmentForm } from "@/features/crm/equipment/schemas/event-equipment-schema";
 import { createEventEquipmentApiService } from "@/features/crm/equipment/services/event-equipment-api-service";
 
-type EventEquipmentRouteContext = { params: { eventId: string } };
+type EventEquipmentRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventEquipmentRouteContext) {
+export async function GET(_: Request, props: EventEquipmentRouteContext) {
+  const params = await props.params;
   const service = await createEventEquipmentApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(
-  request: Request,
-  { params }: EventEquipmentRouteContext,
-) {
+export async function POST(request: Request, props: EventEquipmentRouteContext) {
+  const params = await props.params;
   const service = await createEventEquipmentApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

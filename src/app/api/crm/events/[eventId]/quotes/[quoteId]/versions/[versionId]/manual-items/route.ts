@@ -5,13 +5,11 @@ import { validateQuoteManualItem } from "@/features/crm/quote/schemas/quote-sche
 import { createQuoteApiService } from "@/features/crm/quote/services/quote-api-service";
 
 type QuoteManualItemsRouteContext = {
-  params: { eventId: string; quoteId: string; versionId: string };
+  params: Promise<{ eventId: string; quoteId: string; versionId: string }>;
 };
 
-export async function POST(
-  request: Request,
-  { params }: QuoteManualItemsRouteContext,
-) {
+export async function POST(request: Request, props: QuoteManualItemsRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

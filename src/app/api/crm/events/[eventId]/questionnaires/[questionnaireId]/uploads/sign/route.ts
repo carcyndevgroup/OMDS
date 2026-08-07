@@ -7,12 +7,13 @@ import {
 } from "@/features/crm/questionnaire/repositories/questionnaire-upload-repository";
 
 type UploadSignRouteContext = {
-  params: { eventId: string; questionnaireId: string };
+  params: Promise<{ eventId: string; questionnaireId: string }>;
 };
 
 const BUCKET = "portal-questionnaire-uploads";
 
-export async function POST(request: Request, { params }: UploadSignRouteContext) {
+export async function POST(request: Request, props: UploadSignRouteContext) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const {
     data: { user },

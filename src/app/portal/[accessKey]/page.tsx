@@ -15,8 +15,8 @@ import {
 } from "@/features/crm/portal/repositories/public-portal-documents-repository";
 
 type PortalPageProps = {
-  params: { accessKey: string };
-  searchParams?: { tab?: string };
+  params: Promise<{ accessKey: string }>;
+  searchParams?: Promise<{ tab?: string }>;
 };
 
 const uuidPattern =
@@ -26,7 +26,9 @@ export const metadata: Metadata = {
   title: translations.en["public.portal.heading"],
 };
 
-export default async function PortalPage({ params, searchParams }: PortalPageProps) {
+export default async function PortalPage(props: PortalPageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   if (!uuidPattern.test(params.accessKey)) notFound();
 
   const database = await createServerSupabaseClient();

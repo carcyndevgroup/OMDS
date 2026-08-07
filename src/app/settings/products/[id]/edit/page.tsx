@@ -1,7 +1,8 @@
 import { ProductEdit } from "@/features/settings/product";
 
-type EditProductPageProps = { params: { id: string } };
+type EditProductPageProps = { params: Promise<{ id: string }> };
 
-export default function EditProductPage({ params }: EditProductPageProps) {
+export default async function EditProductPage(props: EditProductPageProps) {
+  const params = await props.params;
   return <ProductEdit id={params.id} />;
 }

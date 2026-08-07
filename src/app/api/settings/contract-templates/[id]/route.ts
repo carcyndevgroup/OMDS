@@ -8,9 +8,10 @@ import {
   TEMPLATE_IN_USE_DELETE_FORBIDDEN,
 } from "@/features/settings/contract-template/repositories/contract-template-repository";
 
-type ContractTemplateRouteContext = { params: { id: string } };
+type ContractTemplateRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: ContractTemplateRouteContext) {
+export async function GET(_: Request, props: ContractTemplateRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -18,7 +19,8 @@ export async function GET(_: Request, { params }: ContractTemplateRouteContext) 
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: ContractTemplateRouteContext) {
+export async function PUT(request: Request, props: ContractTemplateRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -37,7 +39,8 @@ export async function PUT(request: Request, { params }: ContractTemplateRouteCon
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PATCH(request: Request, { params }: ContractTemplateRouteContext) {
+export async function PATCH(request: Request, props: ContractTemplateRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -61,7 +64,8 @@ export async function PATCH(request: Request, { params }: ContractTemplateRouteC
   return template ? NextResponse.json({ data: template }) : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function DELETE(_: Request, { params }: ContractTemplateRouteContext) {
+export async function DELETE(_: Request, props: ContractTemplateRouteContext) {
+  const params = await props.params;
   const service = await createContractTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

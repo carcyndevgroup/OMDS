@@ -4,9 +4,10 @@ import { parseFiscalProfileValues } from "@/features/sat-facturas/schemas/sat-se
 import { validateFiscalProfile } from "@/features/sat-facturas/schemas/sat-settings-schema";
 import { createSatFacturaApiService } from "@/features/sat-facturas/services/sat-factura-api-service";
 
-type FiscalProfileRouteContext = { params: { id: string } };
+type FiscalProfileRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: FiscalProfileRouteContext) {
+export async function GET(_: Request, props: FiscalProfileRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: FiscalProfileRouteContext) {
   return NextResponse.json({ data });
 }
 
-export async function PUT(request: Request, { params }: FiscalProfileRouteContext) {
+export async function PUT(request: Request, props: FiscalProfileRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

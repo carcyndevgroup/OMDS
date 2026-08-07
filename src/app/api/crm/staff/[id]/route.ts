@@ -4,9 +4,10 @@ import { parseStaffFormValues } from "@/features/crm/staff/schemas/staff-parser"
 import { validateStaffForm } from "@/features/crm/staff/schemas/staff-schema";
 import { createStaffApiService } from "@/features/crm/staff/services/staff-api-service";
 
-type StaffRouteContext = { params: { id: string } };
+type StaffRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: StaffRouteContext) {
+export async function GET(_: Request, props: StaffRouteContext) {
+  const params = await props.params;
   const service = await createStaffApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: StaffRouteContext) {
     : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: StaffRouteContext) {
+export async function PUT(request: Request, props: StaffRouteContext) {
+  const params = await props.params;
   const service = await createStaffApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

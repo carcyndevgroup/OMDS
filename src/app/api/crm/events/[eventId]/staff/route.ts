@@ -4,16 +4,18 @@ import { parseEventStaffFormValues } from "@/features/crm/staff/schemas/event-st
 import { validateEventStaffForm } from "@/features/crm/staff/schemas/event-staff-schema";
 import { createEventStaffApiService } from "@/features/crm/staff/services/event-staff-api-service";
 
-type EventStaffRouteContext = { params: { eventId: string } };
+type EventStaffRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: EventStaffRouteContext) {
+export async function GET(_: Request, props: EventStaffRouteContext) {
+  const params = await props.params;
   const service = await createEventStaffApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: EventStaffRouteContext) {
+export async function POST(request: Request, props: EventStaffRouteContext) {
+  const params = await props.params;
   const service = await createEventStaffApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

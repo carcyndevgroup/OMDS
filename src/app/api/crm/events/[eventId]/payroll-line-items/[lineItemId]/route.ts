@@ -5,10 +5,11 @@ import { validateEventPayrollLineItem } from "@/features/crm/financials/schemas/
 import { createEventPayrollLineItemApiService } from "@/features/crm/financials/services/event-payroll-line-item-api-service";
 
 type PayrollLineItemRouteContext = {
-  params: { eventId: string; lineItemId: string };
+  params: Promise<{ eventId: string; lineItemId: string }>;
 };
 
-export async function DELETE(_: Request, { params }: PayrollLineItemRouteContext) {
+export async function DELETE(_: Request, props: PayrollLineItemRouteContext) {
+  const params = await props.params;
   const service = await createEventPayrollLineItemApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function DELETE(_: Request, { params }: PayrollLineItemRouteContext
   return NextResponse.json({ data: true });
 }
 
-export async function PATCH(_: Request, { params }: PayrollLineItemRouteContext) {
+export async function PATCH(_: Request, props: PayrollLineItemRouteContext) {
+  const params = await props.params;
   const service = await createEventPayrollLineItemApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -26,7 +28,8 @@ export async function PATCH(_: Request, { params }: PayrollLineItemRouteContext)
   return NextResponse.json({ data: { id } });
 }
 
-export async function PUT(request: Request, { params }: PayrollLineItemRouteContext) {
+export async function PUT(request: Request, props: PayrollLineItemRouteContext) {
+  const params = await props.params;
   const service = await createEventPayrollLineItemApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

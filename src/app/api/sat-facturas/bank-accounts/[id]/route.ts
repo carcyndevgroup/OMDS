@@ -4,9 +4,10 @@ import { parseBankAccountValues } from "@/features/sat-facturas/schemas/sat-sett
 import { validateBankAccount } from "@/features/sat-facturas/schemas/sat-settings-schema";
 import { createSatFacturaApiService } from "@/features/sat-facturas/services/sat-factura-api-service";
 
-type BankAccountRouteContext = { params: { id: string } };
+type BankAccountRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: BankAccountRouteContext) {
+export async function GET(_: Request, props: BankAccountRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: BankAccountRouteContext) {
   return NextResponse.json({ data });
 }
 
-export async function PUT(request: Request, { params }: BankAccountRouteContext) {
+export async function PUT(request: Request, props: BankAccountRouteContext) {
+  const params = await props.params;
   const service = await createSatFacturaApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

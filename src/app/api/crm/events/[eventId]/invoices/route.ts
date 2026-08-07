@@ -4,16 +4,18 @@ import { createInvoiceApiService } from "@/features/crm/invoice/services/invoice
 import type { InvoiceCreateInput } from "@/features/crm/invoice/types/invoice";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
-type InvoicesRouteContext = { params: { eventId: string } };
+type InvoicesRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: InvoicesRouteContext) {
+export async function GET(_: Request, props: InvoicesRouteContext) {
+  const params = await props.params;
   const service = await createInvoiceApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: InvoicesRouteContext) {
+export async function POST(request: Request, props: InvoicesRouteContext) {
+  const params = await props.params;
   const service = await createInvoiceApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

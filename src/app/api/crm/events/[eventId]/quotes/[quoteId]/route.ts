@@ -5,7 +5,7 @@ import type { QuoteWorkflowAction } from "@/features/crm/quote/types/quote";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
 type QuoteRouteContext = {
-  params: { eventId: string; quoteId: string };
+  params: Promise<{ eventId: string; quoteId: string }>;
 };
 
 const actions = new Set<QuoteWorkflowAction>([
@@ -16,7 +16,8 @@ const actions = new Set<QuoteWorkflowAction>([
   "send",
 ]);
 
-export async function PATCH(request: Request, { params }: QuoteRouteContext) {
+export async function PATCH(request: Request, props: QuoteRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

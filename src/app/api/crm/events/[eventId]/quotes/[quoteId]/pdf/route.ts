@@ -7,10 +7,11 @@ import { buildDocumentFilename } from "@/features/crm/shared/documents/document-
 import { createQuotePdfDocument } from "@/features/crm/shared/pdf/document-pdf";
 
 type QuotePdfRouteContext = {
-  params: { eventId: string; quoteId: string };
+  params: Promise<{ eventId: string; quoteId: string }>;
 };
 
-export async function GET(request: Request, { params }: QuotePdfRouteContext) {
+export async function GET(request: Request, props: QuotePdfRouteContext) {
+  const params = await props.params;
   const service = await createQuoteApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

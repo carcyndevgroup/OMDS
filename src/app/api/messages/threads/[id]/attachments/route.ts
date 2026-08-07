@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/core/supabase/server-client";
 
 const BUCKET = "message-attachments";
-type Context = { params: { id: string } };
+type Context = { params: Promise<{ id: string }> };
 
-export async function POST(request: Request, { params }: Context) {
+export async function POST(request: Request, props: Context) {
+  const params = await props.params;
   const database = await createServerSupabaseClient();
   const user = await database.auth.getUser();
   if (user.error || !user.data.user) return NextResponse.json({ code: "unauthorized" }, { status: 401 });

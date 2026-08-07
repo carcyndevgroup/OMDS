@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createEmailTemplateApiService } from "@/features/settings/email-template/services/email-template-api-service";
 
-type EmailTemplateUsageRouteContext = { params: { id: string } };
+type EmailTemplateUsageRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: EmailTemplateUsageRouteContext) {
+export async function GET(_: Request, props: EmailTemplateUsageRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

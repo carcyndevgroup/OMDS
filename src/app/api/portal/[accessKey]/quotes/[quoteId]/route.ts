@@ -5,12 +5,13 @@ import { respondPublicPortalQuote } from "@/features/crm/portal/repositories/cli
 import type { PublicPortalQuoteAction } from "@/features/crm/portal/types/client-portal";
 
 type PublicQuoteRouteContext = {
-  params: { accessKey: string; quoteId: string };
+  params: Promise<{ accessKey: string; quoteId: string }>;
 };
 
 const actions = new Set<PublicPortalQuoteAction>(["accept", "decline"]);
 
-export async function PATCH(request: Request, { params }: PublicQuoteRouteContext) {
+export async function PATCH(request: Request, props: PublicQuoteRouteContext) {
+  const params = await props.params;
   let body: unknown;
   try {
     body = await request.json();

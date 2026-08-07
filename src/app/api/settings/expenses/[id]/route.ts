@@ -4,12 +4,10 @@ import { parseExpenseCategoryValues } from "@/features/settings/expense/schemas/
 import { validateExpenseCategory } from "@/features/settings/expense/schemas/expense-category-schema";
 import { createExpenseCategoryApiService } from "@/features/settings/expense/services/expense-category-api-service";
 
-type ExpenseCategoryRouteContext = { params: { id: string } };
+type ExpenseCategoryRouteContext = { params: Promise<{ id: string }> };
 
-export async function PUT(
-  request: Request,
-  { params }: ExpenseCategoryRouteContext,
-) {
+export async function PUT(request: Request, props: ExpenseCategoryRouteContext) {
+  const params = await props.params;
   const service = await createExpenseCategoryApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

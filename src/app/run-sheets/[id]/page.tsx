@@ -1,9 +1,10 @@
 import { EventRunSheetPrintPage } from "@/features/crm/event/details/event-run-sheet-print-page";
 
 type RunSheetPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function RunSheetPage({ params }: RunSheetPageProps) {
+export default async function RunSheetPage(props: RunSheetPageProps) {
+  const params = await props.params;
   return <EventRunSheetPrintPage id={params.id} />;
 }

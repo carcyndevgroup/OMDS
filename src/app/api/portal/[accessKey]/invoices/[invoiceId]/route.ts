@@ -6,10 +6,11 @@ import { getPublicClientPortalAccess } from "@/features/crm/portal/repositories/
 import { listPublicPortalInvoices } from "@/features/crm/portal/repositories/public-portal-documents-repository";
 
 type InvoiceRouteContext = {
-  params: { accessKey: string; invoiceId: string };
+  params: Promise<{ accessKey: string; invoiceId: string }>;
 };
 
-export async function PATCH(_: Request, { params }: InvoiceRouteContext) {
+export async function PATCH(_: Request, props: InvoiceRouteContext) {
+  const params = await props.params;
   const database = createAdminSupabaseClient();
   const portal = await getPublicClientPortalAccess(database, params.accessKey);
 

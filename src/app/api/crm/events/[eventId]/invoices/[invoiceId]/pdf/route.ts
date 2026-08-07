@@ -7,10 +7,11 @@ import { buildDocumentFilename } from "@/features/crm/shared/documents/document-
 import { createInvoicePdfDocument } from "@/features/crm/shared/pdf/document-pdf";
 
 type InvoicePdfRouteContext = {
-  params: { eventId: string; invoiceId: string };
+  params: Promise<{ eventId: string; invoiceId: string }>;
 };
 
-export async function GET(request: Request, { params }: InvoicePdfRouteContext) {
+export async function GET(request: Request, props: InvoicePdfRouteContext) {
+  const params = await props.params;
   const service = await createInvoiceApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

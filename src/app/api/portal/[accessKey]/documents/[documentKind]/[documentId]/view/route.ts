@@ -6,16 +6,17 @@ import { markPublicPortalDocumentViewed } from "@/features/crm/portal/repositori
 type DocumentKind = "contract" | "invoice" | "questionnaire" | "quote";
 
 type PublicDocumentViewRouteContext = {
-  params: {
+  params: Promise<{
     accessKey: string;
     documentId: string;
     documentKind: string;
-  };
+  }>;
 };
 
 const allowedKinds = new Set<DocumentKind>(["contract", "invoice", "questionnaire", "quote"]);
 
-export async function PATCH(_: Request, { params }: PublicDocumentViewRouteContext) {
+export async function PATCH(_: Request, props: PublicDocumentViewRouteContext) {
+  const params = await props.params;
   if (!allowedKinds.has(params.documentKind as DocumentKind)) {
     return NextResponse.json({ code: "invalid_document_kind" }, { status: 400 });
   }

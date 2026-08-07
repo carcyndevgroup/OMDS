@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 
 import { createEmailTemplateApiService } from "@/features/settings/email-template/services/email-template-api-service";
 
-type EmailTemplateRollbackRouteContext = { params: { id: string; versionId: string } };
+type EmailTemplateRollbackRouteContext = { params: Promise<{ id: string; versionId: string }> };
 
-export async function POST(_: Request, { params }: EmailTemplateRollbackRouteContext) {
+export async function POST(_: Request, props: EmailTemplateRollbackRouteContext) {
+  const params = await props.params;
   const service = await createEmailTemplateApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

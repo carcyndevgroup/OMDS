@@ -1,9 +1,10 @@
 import { LeadConversion } from "@/features/crm/client/conversion/lead-conversion";
 
 type ConvertLeadPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function ConvertLeadPage({ params }: ConvertLeadPageProps) {
+export default async function ConvertLeadPage(props: ConvertLeadPageProps) {
+  const params = await props.params;
   return <LeadConversion id={params.id} />;
 }

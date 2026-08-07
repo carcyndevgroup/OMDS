@@ -4,9 +4,10 @@ import { parseProductFormValues } from "@/features/settings/product/schemas/prod
 import { validateProductForm } from "@/features/settings/product/schemas/product-schema";
 import { createProductApiService } from "@/features/settings/product/services/product-api-service";
 
-type ProductRouteContext = { params: { id: string } };
+type ProductRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: ProductRouteContext) {
+export async function GET(_: Request, props: ProductRouteContext) {
+  const params = await props.params;
   const service = await createProductApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: ProductRouteContext) {
   return NextResponse.json({ data: product });
 }
 
-export async function PUT(request: Request, { params }: ProductRouteContext) {
+export async function PUT(request: Request, props: ProductRouteContext) {
+  const params = await props.params;
   const service = await createProductApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

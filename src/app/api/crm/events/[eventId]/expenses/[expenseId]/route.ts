@@ -5,13 +5,11 @@ import { validateEventExpense } from "@/features/crm/financials/schemas/event-ex
 import { createEventExpenseApiService } from "@/features/crm/financials/services/event-expense-api-service";
 
 type EventExpenseItemRouteContext = {
-  params: { eventId: string; expenseId: string };
+  params: Promise<{ eventId: string; expenseId: string }>;
 };
 
-export async function PATCH(
-  request: Request,
-  { params }: EventExpenseItemRouteContext,
-) {
+export async function PATCH(request: Request, props: EventExpenseItemRouteContext) {
+  const params = await props.params;
   const service = await createEventExpenseApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -33,10 +31,8 @@ export async function PATCH(
   });
 }
 
-export async function DELETE(
-  _: Request,
-  { params }: EventExpenseItemRouteContext,
-) {
+export async function DELETE(_: Request, props: EventExpenseItemRouteContext) {
+  const params = await props.params;
   const service = await createEventExpenseApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

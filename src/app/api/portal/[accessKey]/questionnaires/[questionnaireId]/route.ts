@@ -6,17 +6,15 @@ import { savePublicPortalQuestionnaireProgress } from "@/features/crm/portal/rep
 import { submitPublicPortalQuestionnaire } from "@/features/crm/portal/repositories/client-portal-repository";
 
 type PublicQuestionnaireRouteContext = {
-  params: { accessKey: string; questionnaireId: string };
+  params: Promise<{ accessKey: string; questionnaireId: string }>;
 };
 
 const isRecord = (value: unknown): value is Record<string, Json> => {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 };
 
-export async function PATCH(
-  request: Request,
-  { params }: PublicQuestionnaireRouteContext,
-) {
+export async function PATCH(request: Request, props: PublicQuestionnaireRouteContext) {
+  const params = await props.params;
   let body: unknown;
 
   try {

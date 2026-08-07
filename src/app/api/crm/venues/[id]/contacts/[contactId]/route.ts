@@ -4,9 +4,10 @@ import { parseVenueContactFormValues } from "@/features/crm/venue/schemas/venue-
 import { validateVenueContactForm } from "@/features/crm/venue/schemas/venue-contact-schema";
 import { createVenueContactApiService } from "@/features/crm/venue/services/venue-contact-api-service";
 
-type VenueContactRouteContext = { params: { contactId: string; id: string } };
+type VenueContactRouteContext = { params: Promise<{ contactId: string; id: string }> };
 
-export async function PUT(request: Request, { params }: VenueContactRouteContext) {
+export async function PUT(request: Request, props: VenueContactRouteContext) {
+  const params = await props.params;
   const service = await createVenueContactApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -5,10 +5,11 @@ import { createClientApiService } from "@/features/crm/client/services/client-ap
 import { parseClientFormValues } from "@/features/crm/client/schemas/client-parser";
 
 type ClientRouteContext = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export async function GET(_: Request, { params }: ClientRouteContext) {
+export async function GET(_: Request, props: ClientRouteContext) {
+  const params = await props.params;
   const service = await createClientApiService();
 
   if (!service) {
@@ -24,7 +25,8 @@ export async function GET(_: Request, { params }: ClientRouteContext) {
   return NextResponse.json({ data: client });
 }
 
-export async function PUT(request: Request, { params }: ClientRouteContext) {
+export async function PUT(request: Request, props: ClientRouteContext) {
+  const params = await props.params;
   const service = await createClientApiService();
 
   if (!service) {

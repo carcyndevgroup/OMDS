@@ -4,16 +4,18 @@ import { parseEventPayrollLineItemValues } from "@/features/crm/financials/schem
 import { validateEventPayrollLineItem } from "@/features/crm/financials/schemas/event-payroll-line-item-schema";
 import { createEventPayrollLineItemApiService } from "@/features/crm/financials/services/event-payroll-line-item-api-service";
 
-type PayrollLineItemRouteContext = { params: { eventId: string } };
+type PayrollLineItemRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: PayrollLineItemRouteContext) {
+export async function GET(_: Request, props: PayrollLineItemRouteContext) {
+  const params = await props.params;
   const service = await createEventPayrollLineItemApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: PayrollLineItemRouteContext) {
+export async function POST(request: Request, props: PayrollLineItemRouteContext) {
+  const params = await props.params;
   const service = await createEventPayrollLineItemApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

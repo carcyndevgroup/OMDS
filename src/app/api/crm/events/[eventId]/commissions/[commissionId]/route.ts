@@ -5,13 +5,11 @@ import { validateEventCommission } from "@/features/crm/financials/schemas/event
 import { createEventCommissionApiService } from "@/features/crm/financials/services/event-commission-api-service";
 
 type EventCommissionItemRouteContext = {
-  params: { commissionId: string; eventId: string };
+  params: Promise<{ commissionId: string; eventId: string }>;
 };
 
-export async function PATCH(
-  request: Request,
-  { params }: EventCommissionItemRouteContext,
-) {
+export async function PATCH(request: Request, props: EventCommissionItemRouteContext) {
+  const params = await props.params;
   const service = await createEventCommissionApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -33,10 +31,8 @@ export async function PATCH(
   });
 }
 
-export async function DELETE(
-  _: Request,
-  { params }: EventCommissionItemRouteContext,
-) {
+export async function DELETE(_: Request, props: EventCommissionItemRouteContext) {
+  const params = await props.params;
   const service = await createEventCommissionApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

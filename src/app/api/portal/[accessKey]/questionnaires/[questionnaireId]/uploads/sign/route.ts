@@ -4,15 +4,13 @@ import { createServerSupabaseClient } from "@/core/supabase/server-client";
 import { listPublicPortalQuestionnaires } from "@/features/crm/portal/repositories/client-portal-repository";
 
 type PublicQuestionnaireUploadSignRouteContext = {
-  params: { accessKey: string; questionnaireId: string };
+  params: Promise<{ accessKey: string; questionnaireId: string }>;
 };
 
 const BUCKET = "portal-questionnaire-uploads";
 
-export async function POST(
-  request: Request,
-  { params }: PublicQuestionnaireUploadSignRouteContext,
-) {
+export async function POST(request: Request, props: PublicQuestionnaireUploadSignRouteContext) {
+  const params = await props.params;
   let body: unknown;
 
   try {

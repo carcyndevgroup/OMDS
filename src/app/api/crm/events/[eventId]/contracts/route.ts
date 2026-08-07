@@ -4,16 +4,18 @@ import type { Locale } from "@/core/i18n";
 import { createContractApiService } from "@/features/crm/contract/services/contract-api-service";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
-type ContractsRouteContext = { params: { eventId: string } };
+type ContractsRouteContext = { params: Promise<{ eventId: string }> };
 
-export async function GET(_: Request, { params }: ContractsRouteContext) {
+export async function GET(_: Request, props: ContractsRouteContext) {
+  const params = await props.params;
   const service = await createContractApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.list(params.eventId) });
 }
 
-export async function POST(request: Request, { params }: ContractsRouteContext) {
+export async function POST(request: Request, props: ContractsRouteContext) {
+  const params = await props.params;
   const service = await createContractApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 import { createPayrollApiService } from "@/features/payroll/services/payroll-api-service";
 
 type RouteParams = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
-export async function GET(_request: Request, { params }: RouteParams) {
+export async function GET(_request: Request, props: RouteParams) {
+  const params = await props.params;
   const service = await createPayrollApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

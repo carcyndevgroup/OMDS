@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { parseVenueSettingsFormValues } from "@/features/crm/venue/schemas/venue-settings-parser";
 import { createVenueApiService } from "@/features/crm/venue/services/venue-api-service";
 
-type VenueSettingsRouteContext = { params: { id: string } };
+type VenueSettingsRouteContext = { params: Promise<{ id: string }> };
 
-export async function PUT(request: Request, { params }: VenueSettingsRouteContext) {
+export async function PUT(request: Request, props: VenueSettingsRouteContext) {
+  const params = await props.params;
   const service = await createVenueApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

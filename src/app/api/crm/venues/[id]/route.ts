@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { parseVenueFormValues } from "@/features/crm/venue/schemas/venue-parser";
 import { createVenueApiService } from "@/features/crm/venue/services/venue-api-service";
 
-type VenueRouteContext = { params: { id: string } };
+type VenueRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: VenueRouteContext) {
+export async function GET(_: Request, props: VenueRouteContext) {
+  const params = await props.params;
   const service = await createVenueApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -15,7 +16,8 @@ export async function GET(_: Request, { params }: VenueRouteContext) {
     : NextResponse.json({ code: "venue_not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: VenueRouteContext) {
+export async function PUT(request: Request, props: VenueRouteContext) {
+  const params = await props.params;
   const service = await createVenueApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

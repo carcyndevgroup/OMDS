@@ -4,16 +4,18 @@ import { parseVenueContactFormValues } from "@/features/crm/venue/schemas/venue-
 import { validateVenueContactForm } from "@/features/crm/venue/schemas/venue-contact-schema";
 import { createVenueContactApiService } from "@/features/crm/venue/services/venue-contact-api-service";
 
-type VenueContactsRouteContext = { params: { id: string } };
+type VenueContactsRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: VenueContactsRouteContext) {
+export async function GET(_: Request, props: VenueContactsRouteContext) {
+  const params = await props.params;
   const service = await createVenueContactApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.listByVenue(params.id) });
 }
 
-export async function POST(request: Request, { params }: VenueContactsRouteContext) {
+export async function POST(request: Request, props: VenueContactsRouteContext) {
+  const params = await props.params;
   const service = await createVenueContactApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

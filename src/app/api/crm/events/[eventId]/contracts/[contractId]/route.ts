@@ -5,12 +5,13 @@ import type { ContractAction } from "@/features/crm/contract/types/contract";
 import { recordClientEventActivity } from "@/features/crm/shared/services/record-client-activity";
 
 type ContractRouteContext = {
-  params: { contractId: string; eventId: string };
+  params: Promise<{ contractId: string; eventId: string }>;
 };
 
 const actions = new Set<ContractAction>(["send", "sign", "void"]);
 
-export async function PATCH(request: Request, { params }: ContractRouteContext) {
+export async function PATCH(request: Request, props: ContractRouteContext) {
+  const params = await props.params;
   const service = await createContractApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

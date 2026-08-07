@@ -1,9 +1,10 @@
 import { SatFacturaEdit } from "@/features/sat-facturas/components/sat-factura-edit";
 
 type SatFacturaEditPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function SatFacturaEditPage({ params }: SatFacturaEditPageProps) {
+export default async function SatFacturaEditPage(props: SatFacturaEditPageProps) {
+  const params = await props.params;
   return <SatFacturaEdit facturaId={params.id} />;
 }

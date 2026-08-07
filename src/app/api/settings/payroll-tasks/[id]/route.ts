@@ -4,9 +4,10 @@ import { parsePayrollTaskValues } from "@/features/settings/payroll-task/schemas
 import { validatePayrollTask } from "@/features/settings/payroll-task/schemas/payroll-task-schema";
 import { createPayrollTaskApiService } from "@/features/settings/payroll-task/services/payroll-task-api-service";
 
-type PayrollTaskRouteContext = { params: { id: string } };
+type PayrollTaskRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: PayrollTaskRouteContext) {
+export async function GET(_: Request, props: PayrollTaskRouteContext) {
+  const params = await props.params;
   const service = await createPayrollTaskApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: PayrollTaskRouteContext) {
   return NextResponse.json({ data: task });
 }
 
-export async function PUT(request: Request, { params }: PayrollTaskRouteContext) {
+export async function PUT(request: Request, props: PayrollTaskRouteContext) {
+  const params = await props.params;
   const service = await createPayrollTaskApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

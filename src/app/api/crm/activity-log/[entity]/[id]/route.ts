@@ -6,9 +6,9 @@ const validEntities = new Set(["leads", "clients"]);
 
 export async function GET(
   _request: Request,
-  context: { params: { entity: string; id: string } },
+  context: { params: Promise<{ entity: string; id: string }> },
 ) {
-  const { entity, id } = context.params;
+  const { entity, id } = (await context.params);
   if (!validEntities.has(entity)) {
     return NextResponse.json({ code: "invalid_entity" }, { status: 400 });
   }

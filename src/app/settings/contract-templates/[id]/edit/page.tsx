@@ -1,7 +1,8 @@
 import { ContractTemplateEdit } from "@/features/settings/contract-template";
 
-type EditContractTemplatePageProps = { params: { id: string } };
+type EditContractTemplatePageProps = { params: Promise<{ id: string }> };
 
-export default function EditContractTemplatePage({ params }: EditContractTemplatePageProps) {
+export default async function EditContractTemplatePage(props: EditContractTemplatePageProps) {
+  const params = await props.params;
   return <ContractTemplateEdit id={params.id} />;
 }

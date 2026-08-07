@@ -4,9 +4,10 @@ import { parseEquipmentFormValues } from "@/features/settings/equipment/schemas/
 import { validateEquipmentForm } from "@/features/settings/equipment/schemas/equipment-schema";
 import { createEquipmentApiService } from "@/features/settings/equipment/services/equipment-api-service";
 
-type EquipmentRouteContext = { params: { id: string } };
+type EquipmentRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(_: Request, { params }: EquipmentRouteContext) {
+export async function GET(_: Request, props: EquipmentRouteContext) {
+  const params = await props.params;
   const service = await createEquipmentApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
@@ -16,7 +17,8 @@ export async function GET(_: Request, { params }: EquipmentRouteContext) {
     : NextResponse.json({ code: "not_found" }, { status: 404 });
 }
 
-export async function PUT(request: Request, { params }: EquipmentRouteContext) {
+export async function PUT(request: Request, props: EquipmentRouteContext) {
+  const params = await props.params;
   const service = await createEquipmentApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

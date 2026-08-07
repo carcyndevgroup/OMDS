@@ -4,22 +4,18 @@ import { parseVenueSubLocationFormValues } from "@/features/crm/venue/schemas/ve
 import { validateVenueSubLocationForm } from "@/features/crm/venue/schemas/venue-sub-location-schema";
 import { createVenueSubLocationApiService } from "@/features/crm/venue/services/venue-sub-location-api-service";
 
-type VenueSubLocationsRouteContext = { params: { id: string } };
+type VenueSubLocationsRouteContext = { params: Promise<{ id: string }> };
 
-export async function GET(
-  _: Request,
-  { params }: VenueSubLocationsRouteContext,
-) {
+export async function GET(_: Request, props: VenueSubLocationsRouteContext) {
+  const params = await props.params;
   const service = await createVenueSubLocationApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   return NextResponse.json({ data: await service.listByVenue(params.id) });
 }
 
-export async function POST(
-  request: Request,
-  { params }: VenueSubLocationsRouteContext,
-) {
+export async function POST(request: Request, props: VenueSubLocationsRouteContext) {
+  const params = await props.params;
   const service = await createVenueSubLocationApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

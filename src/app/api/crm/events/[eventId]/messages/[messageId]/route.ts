@@ -3,9 +3,10 @@ import { NextResponse } from "next/server";
 import { createMessageDraftApiService } from "@/features/crm/messages/services/message-draft-api-service";
 import type { MessageDraftStatus } from "@/features/crm/messages/types/message-draft";
 
-type MessageRouteContext = { params: { eventId: string; messageId: string } };
+type MessageRouteContext = { params: Promise<{ eventId: string; messageId: string }> };
 
-export async function PATCH(request: Request, { params }: MessageRouteContext) {
+export async function PATCH(request: Request, props: MessageRouteContext) {
+  const params = await props.params;
   const service = await createMessageDraftApiService();
   if (!service) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 

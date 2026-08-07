@@ -1,9 +1,10 @@
 import { SatFacturaWorkflowEdit } from "@/features/sat-facturas/components/sat-factura-workflow-edit";
 
 type SatFacturaWorkflowPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
-export default function SatFacturaWorkflowPage({ params }: SatFacturaWorkflowPageProps) {
+export default async function SatFacturaWorkflowPage(props: SatFacturaWorkflowPageProps) {
+  const params = await props.params;
   return <SatFacturaWorkflowEdit facturaId={params.id} />;
 }
