@@ -18,6 +18,8 @@ const attachments = (items: { content: Buffer; contentType: string; filename?: s
   }));
 };
 
+const maxEmailsPerSync = 50;
+
 export class ImapSmtpEmailAdapter implements EmailAdapter {
   private readonly smtp;
 
@@ -60,6 +62,7 @@ export class ImapSmtpEmailAdapter implements EmailAdapter {
             threadId: parsed.references?.[0] ?? parsed.inReplyTo ?? undefined,
             to: parsed.to && !Array.isArray(parsed.to) ? parsed.to.value.map(address) : [],
           });
+          if (emails.length >= maxEmailsPerSync) break;
         }
         return { emails, ...(emails.length ? { nextCursor: String(maximumUid) } : {}) };
       } finally {
