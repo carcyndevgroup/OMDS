@@ -12,6 +12,7 @@ All notable changes to the Oh My Desserts & Snacks web application will be docum
 - Fixed the Messages inbox crash when the thread list is initially empty by guarding selected-thread CRM state initialization.
 - Added a Messages inbox mailbox-sync action with localized loading, success, and failure feedback and automatic thread refresh.
 - Added the missing Supabase grants for authenticated and service-role access to unified Messages tables; RLS policies remain enforced.
+- Fixed initial IMAP sync to import the complete inbox instead of only the newest email; later syncs remain cursor-based.
 - Added an immutable shared CRM activity log foundation with Lead and Client overview panels, secure reads, and atomic archive/restore entries.
 - Added automatic Lead and Client creation/update activity entries, including linked client event creation.
 - Added Client Log activity entries for linked quote, contract, invoice, and message creation.
