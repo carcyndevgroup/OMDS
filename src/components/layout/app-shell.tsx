@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 
 import { useTranslation } from "@/core/i18n";
+import { SignOutButton } from "@/features/auth/components/sign-out-button";
 import { AppSidebar } from "./app-sidebar";
 
 type AppShellProps = {
@@ -49,6 +50,9 @@ export function AppShell({ children }: AppShellProps) {
           <Menu aria-hidden="true" size={21} />
         </button>
         <span className="font-black text-white">{t("brand.shortName")}</span>
+        <div className="ml-auto w-9">
+          <SignOutButton isCollapsed />
+        </div>
       </header>
 
       {isNavigationOpen ? (
