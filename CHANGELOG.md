@@ -7,6 +7,7 @@ All notable changes to the Oh My Desserts & Snacks web application will be docum
 - Upgraded the upgrade branch to Next.js 15.5.23 and React 19.2.8, including async request cookies, Promise-based dynamic route params, and offline-safe font loading.
 - Upgraded the branch to Next.js 16.3.0, added the localized App Router not-found boundary, and confirmed the production audit is clear.
 - Added an authenticated Messages connections endpoint and wired Settings provider cards to persisted connection status with safe email adapter readiness fallback.
+- Added authenticated inbound email sync with IMAP cursor persistence, duplicate protection, unified thread/message storage, and controlled mailbox failure responses.
 - Added an immutable shared CRM activity log foundation with Lead and Client overview panels, secure reads, and atomic archive/restore entries.
 - Added automatic Lead and Client creation/update activity entries, including linked client event creation.
 - Added Client Log activity entries for linked quote, contract, invoice, and message creation.
