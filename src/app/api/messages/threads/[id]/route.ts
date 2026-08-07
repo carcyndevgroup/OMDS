@@ -22,7 +22,7 @@ export async function GET(_: Request, props: Context) {
 
   const messages = await database
     .from("messages")
-    .select("id, thread_id, provider_message_id, in_reply_to_id, direction, sender_address, sender_name, subject, body_text, body_html, sent_at, read_at, created_at")
+    .select("id, thread_id, provider_message_id, in_reply_to_id, direction, sender_address, sender_name, subject, body_text, sent_at, read_at, created_at")
     .eq("thread_id", params.id)
     .order("sent_at", { ascending: true });
   if (messages.error) return NextResponse.json({ code: "messages_load_failed" }, { status: 500 });

@@ -15,6 +15,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Confirm the initial test batch shows current Zoho messages, then decide whether historical backfill should remain available.
 - [ ] Investigate why some thread-detail requests exceed 12 seconds and return 500, including the nested attachment query.
 - [ ] Verify optimized thread-detail loading against the previously failing email thread.
+- [ ] Add a safe rich-HTML email viewer with size limits and sanitization before exposing stored `body_html`.
 - [ ] Apply `20260807060000_grant_unified_messages_access.sql` in the connected Supabase project before retesting Messages.
 - [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
 - [ ] Test direct booking flow from client creation through confirmed event. *(Re-test contract creation path after resolver fallback fix.)*
