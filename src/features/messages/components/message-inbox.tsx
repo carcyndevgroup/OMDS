@@ -105,9 +105,12 @@ export function MessageInbox() {
     setIsArchived(selected.is_archived);
     const controller = new AbortController();
     void fetch(`/api/messages/threads/${selected.id}`, { signal: controller.signal })
-      .then((response) => response.json() as Promise<{ data?: { messages?: Message[] } }>)
+      .then((response) => {
+        if (!response.ok) throw new Error("thread_load_failed");
+        return response.json() as Promise<{ data?: { messages?: Message[] } }>;
+      })
       .then((result) => {
-        if (!controller.signal.aborted) setMessages(result.data?.messages ?? []);
+        if (!controller.signal.aborted && result.data?.messages) setMessages(result.data.messages);
       })
       .catch(() => undefined);
     void fetch(`/api/messages/threads/${selected.id}`, { method: "PATCH" });
