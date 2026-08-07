@@ -159,9 +159,17 @@ export function MessageInbox() {
 
   const syncMailbox = async () => {
     setSyncStatus("loading");
-    const response = await fetch("/api/messages/sync", { method: "POST" });
-    setSyncStatus(response.ok ? "success" : "error");
-    if (response.ok) setRefreshKey((current) => current + 1);
+    try {
+      const response = await fetch("/api/messages/sync", { method: "POST" });
+      if (!response.ok) {
+        setSyncStatus("error");
+        return;
+      }
+      setSyncStatus("success");
+      setRefreshKey((current) => current + 1);
+    } catch {
+      setSyncStatus("error");
+    }
   };
 
   return (
