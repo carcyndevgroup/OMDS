@@ -7,6 +7,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 ## Phase 1 - End-to-End Test Hardening
 - [ ] Walk through lead to client to accepted quote to questionnaire to contract to invoice/payment.
 - [ ] Verify sign-in and sign-out manually on desktop and mobile layouts.
+- [ ] Re-test Messages navigation with empty, loaded, and filtered thread lists.
 - [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
 - [ ] Test direct booking flow from client creation through confirmed event. *(Re-test contract creation path after resolver fallback fix.)*
 - [ ] Test PV booking flow from client creation through confirmed event and auto-created SAT/Factura.

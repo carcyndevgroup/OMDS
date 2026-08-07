@@ -65,12 +65,6 @@ export function MessageInbox() {
 
   useEffect(() => {
     const controller = new AbortController();
-    setCrmLeadId(selected.lead_id ?? "");
-    setCrmClientId(selected.client_id ?? "");
-    setCrmEventId(selected.event_id ?? "");
-    setAssignedTo(selected.assigned_to ?? "");
-    setIsStarred(selected.is_starred);
-    setIsArchived(selected.is_archived);
     setIsLoading(true);
     const params = new URLSearchParams({ view });
     if (query.trim()) params.set("q", query.trim());
@@ -93,8 +87,20 @@ export function MessageInbox() {
   useEffect(() => {
     if (!selected) {
       setMessages([]);
+      setCrmLeadId("");
+      setCrmClientId("");
+      setCrmEventId("");
+      setAssignedTo("");
+      setIsStarred(false);
+      setIsArchived(false);
       return;
     }
+    setCrmLeadId(selected.lead_id ?? "");
+    setCrmClientId(selected.client_id ?? "");
+    setCrmEventId(selected.event_id ?? "");
+    setAssignedTo(selected.assigned_to ?? "");
+    setIsStarred(selected.is_starred);
+    setIsArchived(selected.is_archived);
     const controller = new AbortController();
     void fetch(`/api/messages/threads/${selected.id}`, { signal: controller.signal })
       .then((response) => response.json() as Promise<{ data?: { messages?: Message[] } }>)
