@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, Inbox, Link2, Mail, Menu, Paperclip, Search, Send, Star } from "lucide-react";
+import { Archive, Inbox, Link2, Mail, Menu, Paperclip, RefreshCw, Search, Send, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { useTranslation, type TranslationKey } from "@/core/i18n";
@@ -62,6 +62,8 @@ export function MessageInbox() {
   const [assignedTo, setAssignedTo] = useState("");
   const [isStarred, setIsStarred] = useState(false);
   const [isArchived, setIsArchived] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [syncStatus, setSyncStatus] = useState<"" | "error" | "loading" | "success">("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -80,7 +82,7 @@ export function MessageInbox() {
         if (!controller.signal.aborted) setIsLoading(false);
       });
     return () => controller.abort();
-  }, [query, view]);
+  }, [query, refreshKey, view]);
 
   const selected = threads.find((thread) => thread.id === selectedId) ?? threads[0];
 
@@ -155,12 +157,23 @@ export function MessageInbox() {
     setIsSending(false);
   };
 
+  const syncMailbox = async () => {
+    setSyncStatus("loading");
+    const response = await fetch("/api/messages/sync", { method: "POST" });
+    setSyncStatus(response.ok ? "success" : "error");
+    if (response.ok) setRefreshKey((current) => current + 1);
+  };
+
   return (
     <div className="flex min-h-[calc(100vh-7rem)] overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-2xl shadow-black/20">
       <aside className="w-56 shrink-0 border-r border-zinc-800 bg-zinc-900/70 p-4">
         <button className="mb-5 flex w-full items-center justify-center gap-2 rounded-md bg-cyan-300 px-3 py-2 text-sm font-bold text-zinc-950">
           <Mail aria-hidden="true" size={16} /> {t("messages.compose")}
         </button>
+        <button className="mb-5 flex w-full items-center justify-center gap-2 rounded-md border border-zinc-700 px-3 py-2 text-sm font-bold text-zinc-300 hover:border-cyan-300 hover:text-cyan-200" disabled={syncStatus === "loading"} onClick={() => void syncMailbox()} type="button">
+          <RefreshCw aria-hidden="true" className={syncStatus === "loading" ? "animate-spin" : ""} size={16} /> {t(syncStatus === "loading" ? "messages.syncing" : "messages.sync")}
+        </button>
+        {syncStatus === "success" ? <p className="mb-4 text-xs text-emerald-300">{t("messages.syncComplete")}</p> : syncStatus === "error" ? <p className="mb-4 text-xs text-rose-300">{t("messages.syncError")}</p> : null}
         <nav className="space-y-1">
           {(["inbox", "unread", "starred", "archived"] as View[]).map((item) => (
             <button className={`flex w-full items-center gap-3 rounded px-3 py-2 text-left text-sm ${view === item ? "bg-cyan-300/10 text-cyan-200" : "text-zinc-400 hover:bg-zinc-800 hover:text-white"}`} key={item} onClick={() => setView(item)}>
