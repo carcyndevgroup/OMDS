@@ -22,12 +22,32 @@ export async function GET(_: Request, props: Context) {
 
   const messages = await database
     .from("messages")
-    .select("*, message_attachments(*)")
+    .select("id, thread_id, provider_message_id, in_reply_to_id, direction, sender_address, sender_name, subject, body_text, body_html, sent_at, read_at, created_at")
     .eq("thread_id", params.id)
     .order("sent_at", { ascending: true });
   if (messages.error) return NextResponse.json({ code: "messages_load_failed" }, { status: 500 });
 
-  return NextResponse.json({ data: { messages: messages.data, thread: thread.data } });
+  const messageIds = messages.data.map((message) => message.id);
+  const attachments = messageIds.length
+    ? await database
+        .from("message_attachments")
+        .select("id, message_id, file_name, content_type, byte_size, storage_path, provider_attachment_id, created_at")
+        .in("message_id", messageIds)
+    : { data: [], error: null };
+  if (attachments.error) return NextResponse.json({ code: "message_attachments_load_failed" }, { status: 500 });
+
+  const attachmentsByMessage = new Map<string, typeof attachments.data>();
+  for (const attachment of attachments.data) {
+    const current = attachmentsByMessage.get(attachment.message_id) ?? [];
+    current.push(attachment);
+    attachmentsByMessage.set(attachment.message_id, current);
+  }
+  const messagesWithAttachments = messages.data.map((message) => ({
+    ...message,
+    message_attachments: attachmentsByMessage.get(message.id) ?? [],
+  }));
+
+  return NextResponse.json({ data: { messages: messagesWithAttachments, thread: thread.data } });
 }
 
 export async function PATCH(_: Request, props: Context) {
