@@ -6,7 +6,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 
 ## Phase 1 - End-to-End Test Hardening
 - [ ] Walk through lead to client to accepted quote to questionnaire to contract to invoice/payment.
-- [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Next 16 build and high-severity audit checks pass; the existing `src/middleware.ts` convention still emits a deprecation warning because the official codemod made no changes.
+- [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
 - [ ] Test direct booking flow from client creation through confirmed event. *(Re-test contract creation path after resolver fallback fix.)*
 - [ ] Test PV booking flow from client creation through confirmed event and auto-created SAT/Factura.
 - [ ] Test non-PV event with manually created SAT/Factura when a client requests a fiscal invoice.
@@ -58,6 +58,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 
 ## Phase 7 - Final Cleanup
 - [ ] Re-run LOC checks and split any code files near 250 LOC.
+- [ ] Split the existing oversized source files reported by `npm run check:file-sizes`.
 - [ ] Review i18n coverage for newly added screens and controls.
 - [ ] Update `PROJECT_HANDOFF.md` with latest SAT, payroll, calendar, and report decisions.
 - [ ] Run full `npm run typecheck` and `npm run build` after each completed phase.
