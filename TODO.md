@@ -37,7 +37,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 
 ## Phase 5 - Messages / Tasks
 - [ ] Define message center scope before implementation: lead messages, client messages, templates, email logging, or actual sending. The current unified inbox foundation and email adapter contract are in place; provider delivery and Lead/Client conversion actions remain open.
-- [ ] Add server environment values for `EMAIL_ADDRESS`, `EMAIL_IMAP_HOST`, `EMAIL_IMAP_USERNAME`, `EMAIL_IMAP_PASSWORD`, `EMAIL_SMTP_HOST`, and optional SMTP/IMAP ports, TLS, and credentials before implementing live mailbox sync.
+- [ ] Add server environment values for `EMAIL_ADDRESS`, `EMAIL_IMAP_HOST`, `EMAIL_IMAP_USERNAME`, `EMAIL_IMAP_PASSWORD`, `EMAIL_SMTP_HOST`, and optional SMTP/IMAP ports, TLS, and credentials before implementing live mailbox sync. Settings now surfaces persisted provider status and safe email adapter readiness.
 - [ ] Add authenticated inbound sync and outbound delivery routes/jobs using the implemented email adapter once the `info@` mailbox credentials are available.
 - [ ] Define task module scope: manual tasks, event tasks, workflow-generated tasks, and due dates.
 - [ ] Add workflow-generated tasks for high-value moments only after the booking and SAT flows are stable.
