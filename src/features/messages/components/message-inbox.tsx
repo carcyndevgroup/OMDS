@@ -253,7 +253,7 @@ export function MessageInbox() {
               <div className="border-t border-zinc-800 pt-4">
                 <textarea className="min-h-24 w-full resize-y rounded-md border border-zinc-800 bg-zinc-900 p-3 text-sm text-zinc-200 outline-none focus:border-cyan-300" onChange={(event) => setReply(event.target.value)} placeholder={t("messages.replyPlaceholder")} value={reply} />
                 <div className="mt-2 flex items-center justify-between gap-3"><label className="inline-flex cursor-pointer items-center gap-2 text-xs text-zinc-500 hover:text-zinc-200"><Paperclip size={15} />{attachment?.name ?? t("messages.attachFile")}<input className="sr-only" onChange={(event) => setAttachment(event.target.files?.[0] ?? null)} type="file" /></label><button className="inline-flex items-center gap-2 rounded-md bg-cyan-300 px-3 py-2 text-sm font-bold text-zinc-950 disabled:cursor-not-allowed disabled:opacity-50" disabled={!reply.trim() || isSending} onClick={() => void sendReply()}><Send size={15} />{isSending ? t("messages.sending") : t("messages.reply")}</button></div>
-                {replyStatus ? <p className={`mt-2 text-xs ${replyStatus === "error" ? "text-red-300" : "text-amber-300"}`}>{t(replyStatus === "error" ? "messages.replyError" : "messages.replySavedPendingDelivery")}</p> : null}
+                {replyStatus ? <p className={`mt-2 text-xs ${replyStatus === "error" ? "text-red-300" : "text-emerald-300"}`}>{t(replyStatus === "error" ? "messages.replyError" : "messages.replySent")}</p> : null}
               </div>
             </> : <p className="text-sm text-zinc-500">{t("messages.selectThread")}</p>}
           </article>
