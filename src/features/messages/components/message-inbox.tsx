@@ -142,19 +142,12 @@ export function MessageInbox() {
     setIsSending(true);
     setReplyStatus("");
     const response = await fetch(`/api/messages/threads/${selected.id}/reply`, {
-      body: JSON.stringify({ body: reply }),
-      headers: { "Content-Type": "application/json" },
+      body: (() => { const form = new FormData(); form.set("body", reply); if (attachment) form.set("file", attachment); return form; })(),
       method: "POST",
     });
     if (response.ok) {
       const result = (await response.json()) as { data: Message };
       setMessages((current) => [...current, result.data]);
-      if (attachment) {
-        const form = new FormData();
-        form.set("messageId", result.data.id);
-        form.set("file", attachment);
-        await fetch(`/api/messages/threads/${selected.id}/attachments`, { body: form, method: "POST" });
-      }
       setReply("");
       setAttachment(null);
       setReplyStatus("saved");

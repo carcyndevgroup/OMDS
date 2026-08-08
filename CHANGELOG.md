@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Include reply attachments in SMTP delivery and persist them in the outbound message record.
 - Refresh the open Messages view with an automatic five-minute mailbox sync.
 - Send message replies through configured SMTP before recording them as delivered outbound messages.
 - Add an opt-in sanitized, size-limited formatted email view without loading large HTML bodies by default.

@@ -5,7 +5,9 @@ import { createServerSupabaseClient } from "@/core/supabase/server-client";
 
 type Context = { params: Promise<{ id: string }> };
 
-type ReplyPayload = { body?: unknown };
+type ReplyPayload = { body?: unknown; file?: File };
+const ATTACHMENT_BUCKET = "message-attachments";
+const maxAttachmentBytes = 25 * 1024 * 1024;
 
 export async function POST(request: Request, props: Context) {
   const params = await props.params;
@@ -15,13 +17,20 @@ export async function POST(request: Request, props: Context) {
 
   let payload: ReplyPayload;
   try {
-    payload = (await request.json()) as ReplyPayload;
+    if (request.headers.get("content-type")?.includes("multipart/form-data")) {
+      const form = await request.formData();
+      const file = form.get("file");
+      payload = { body: form.get("body"), file: file instanceof File ? file : undefined };
+    } else {
+      payload = (await request.json()) as ReplyPayload;
+    }
   } catch {
     return NextResponse.json({ code: "invalid_json" }, { status: 400 });
   }
   if (typeof payload.body !== "string" || !payload.body.trim()) {
     return NextResponse.json({ code: "reply_body_required" }, { status: 400 });
   }
+  if (payload.file && payload.file.size > maxAttachmentBytes) return NextResponse.json({ code: "attachment_too_large" }, { status: 413 });
 
   const thread = await database
     .from("message_threads")
@@ -48,6 +57,7 @@ export async function POST(request: Request, props: Context) {
   try {
     delivery = await adapterResult.adapter.send({
       bodyText: payload.body.trim(),
+      attachments: payload.file ? [{ content: new Uint8Array(await payload.file.arrayBuffer()), contentType: payload.file.type || "application/octet-stream", fileName: payload.file.name }] : undefined,
       from: { address: adapterResult.config.address },
       inReplyTo: inbound.data.provider_message_id ?? undefined,
       subject: thread.data.subject,
@@ -73,6 +83,18 @@ export async function POST(request: Request, props: Context) {
     .select("*")
     .single();
   if (message.error) return NextResponse.json({ code: "reply_create_failed_after_delivery" }, { status: 500 });
+
+  if (payload.file) {
+    const safeName = payload.file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${params.id}/${message.data.id}/${crypto.randomUUID()}-${safeName}`;
+    const upload = await database.storage.from(ATTACHMENT_BUCKET).upload(path, payload.file, { contentType: payload.file.type || "application/octet-stream", upsert: false });
+    if (upload.error) return NextResponse.json({ code: "attachment_upload_failed_after_delivery" }, { status: 500 });
+    const attachment = await database.from("message_attachments").insert({ byte_size: payload.file.size, content_type: payload.file.type || "application/octet-stream", file_name: payload.file.name, message_id: message.data.id, storage_path: path }).select("*").single();
+    if (attachment.error) {
+      await database.storage.from(ATTACHMENT_BUCKET).remove([path]);
+      return NextResponse.json({ code: "attachment_record_failed_after_delivery" }, { status: 500 });
+    }
+  }
 
   await database
     .from("message_threads")
