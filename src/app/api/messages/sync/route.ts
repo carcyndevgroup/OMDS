@@ -45,7 +45,9 @@ const findOrCreateThread = async (database: Awaited<ReturnType<typeof createServ
 
 const isScheduledRequest = (request: Request) => {
   const configuredSecret = process.env.CRON_SECRET;
-  return Boolean(configuredSecret && request.headers.get("x-cron-secret") === configuredSecret);
+  const authorization = request.headers.get("authorization");
+  const bearerSecret = authorization?.startsWith("Bearer ") ? authorization.slice(7) : null;
+  return Boolean(configuredSecret && (request.headers.get("x-cron-secret") === configuredSecret || bearerSecret === configuredSecret));
 };
 
 export async function POST(request: Request) {
