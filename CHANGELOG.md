@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Show image attachments inline in message threads while retaining download links for every file.
 - Persist inbound IMAP attachments in the existing message attachment storage flow.
 - Show the newest message first when reading a conversation.
 - Improve long message thread readability with bounded scrolling and expandable message bodies.

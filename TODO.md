@@ -11,6 +11,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Run the first authenticated mailbox sync and verify imported threads, participants, attachments, and duplicate handling.
 - [ ] Run mailbox sync again after the initial-range fix to import historical inbox mail and verify duplicate protection.
 - [x] Persist inbound IMAP attachments and expose them through the existing attachment download route.
+- [x] Preview image attachments inline in the message reader.
 - [ ] Repeat mailbox sync until the Zoho inbox is fully imported after the 50-email batch limit.
 - [ ] Confirm the sync button reports completion without requiring a browser refresh.
 - [ ] Confirm the initial test batch shows current Zoho messages, then decide whether historical backfill should remain available.

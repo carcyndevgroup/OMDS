@@ -25,7 +25,7 @@ type Thread = {
 };
 
 type Message = {
-  message_attachments?: { file_name: string; id: string }[];
+  message_attachments?: { byte_size: number; content_type: string; file_name: string; id: string }[];
   body_text: string;
   direction: "inbound" | "outbound";
   id: string;
@@ -243,7 +243,7 @@ export function MessageInbox() {
                     <div className="flex justify-between gap-4 text-xs text-zinc-500"><span>{message.sender_name || t("messages.unknownSender")}</span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
                     <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${expandedMessages.has(message.id) ? "" : "max-h-32 overflow-hidden"}`}>{message.body_text}</p>
                     {message.body_text.length > 700 ? <button className="mt-2 text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => setExpandedMessages((current) => { const next = new Set(current); if (next.has(message.id)) next.delete(message.id); else next.add(message.id); return next; })} type="button">{expandedMessages.has(message.id) ? t("messages.collapseMessage") : t("messages.expandMessage")}</button> : null}
-                    {message.message_attachments?.length ? <div className="mt-3 space-y-1 border-t border-zinc-700 pt-2">{message.message_attachments.map((file) => <a className="block text-xs font-semibold text-cyan-300 hover:text-cyan-100" href={`/api/messages/attachments/${file.id}`} key={file.id} rel="noreferrer" target="_blank">{file.file_name}</a>)}</div> : null}
+                    {message.message_attachments?.length ? <div className="mt-3 space-y-2 border-t border-zinc-700 pt-2">{message.message_attachments.map((file) => <div key={file.id}>{file.content_type.startsWith("image/") ? <a href={`/api/messages/attachments/${file.id}`} rel="noreferrer" target="_blank"><img alt={file.file_name} className="max-h-64 max-w-full rounded border border-zinc-700 object-contain" src={`/api/messages/attachments/${file.id}`} /></a> : null}<a className="block truncate text-xs font-semibold text-cyan-300 hover:text-cyan-100" href={`/api/messages/attachments/${file.id}`} rel="noreferrer" target="_blank">{file.file_name}</a></div>)}</div> : null}
                   </div>
                 ))}
               </div>
