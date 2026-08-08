@@ -60,6 +60,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Include outbound reply attachments in SMTP delivery and local attachment storage.
 - [x] Add new-message composition with SMTP delivery and optional attachments.
 - [x] Show sender identity in message lists and open conversations.
+- [x] Improve CRM link clarity with selected record labels and contextual guidance.
 - [x] Add five-minute mailbox polling while the Messages view is open.
 - [x] Add a protected scheduler entry point for mailbox sync; deployment cron configuration remains environment-specific.
 - [x] Configure Vercel Cron for five-minute mailbox sync.

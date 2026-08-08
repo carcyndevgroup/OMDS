@@ -254,7 +254,7 @@ export function MessageInbox() {
                 <button className="rounded p-2 text-zinc-500 hover:bg-zinc-800 hover:text-white" title={t("messages.attachments")}><Paperclip size={17} /></button>
               </div>
               <div className="border-b border-zinc-800 py-4">
-                <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500"><Link2 size={14} />{t("messages.crmLinks")}</div>
+                <div className="mb-3 flex items-center justify-between gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500"><span className="flex items-center gap-2"><Link2 size={14} />{t("messages.crmLinks")}</span><span className="font-normal normal-case tracking-normal text-zinc-600">{t("messages.crmLinksHint")}</span></div>
                 <div className="grid gap-2 sm:grid-cols-2">
                   <CrmLookupField labelKey="messages.leadId" onChange={setCrmLeadId} t={t} type="leads" value={crmLeadId} />
                   <CrmLookupField labelKey="messages.clientId" onChange={setCrmClientId} t={t} type="clients" value={crmClientId} />

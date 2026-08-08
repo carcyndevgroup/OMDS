@@ -18,6 +18,7 @@ type Props = {
 export function CrmLookupField({ labelKey, onChange, type, value, t }: Props) {
   const [results, setResults] = useState<Result[]>([]);
   const listId = `message-crm-${type}`;
+  const selectedLabel = results.find((result) => result.id === value)?.label;
 
   useEffect(() => {
     if (value.length < 2) {
@@ -38,6 +39,7 @@ export function CrmLookupField({ labelKey, onChange, type, value, t }: Props) {
     <label className="space-y-1">
       <span className="sr-only">{t(labelKey)}</span>
       <input className="w-full rounded border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-xs text-zinc-200" list={listId} onChange={(event) => onChange(event.target.value)} placeholder={t(labelKey)} value={value} />
+      {selectedLabel ? <span className="block truncate text-[11px] text-cyan-200">{selectedLabel}</span> : null}
       <datalist id={listId}>
         {results.map((result) => <option key={result.id} label={result.label} value={result.id}>{result.label}</option>)}
       </datalist>

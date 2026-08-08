@@ -14,6 +14,7 @@ type Props = {
 
 export function StaffLookupField({ onChange, t, value }: Props) {
   const [results, setResults] = useState<StaffResult[]>([]);
+  const selectedLabel = results.find((result) => result.id === value)?.label;
 
   useEffect(() => {
     if (value.length < 2) {
@@ -34,6 +35,7 @@ export function StaffLookupField({ onChange, t, value }: Props) {
     <label className="space-y-1">
       <span className="sr-only">{t("messages.assignedTo")}</span>
       <input className="w-full rounded border border-zinc-800 bg-zinc-900 px-2 py-1.5 text-xs text-zinc-200" list="message-crm-staff" onChange={(event) => onChange(event.target.value)} placeholder={t("messages.assignedTo")} value={value} />
+      {selectedLabel ? <span className="block truncate text-[11px] text-cyan-200">{selectedLabel}</span> : null}
       <datalist id="message-crm-staff">
         {results.map((result) => <option key={result.id} label={result.label} value={result.id}>{result.label}</option>)}
       </datalist>
