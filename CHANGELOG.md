@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Show the newest message first when reading a conversation.
 - Improve long message thread readability with bounded scrolling and expandable message bodies.
 - Prevent IMAP sync from merging unrelated emails when References headers do not resolve to an imported parent message.
 ### Added

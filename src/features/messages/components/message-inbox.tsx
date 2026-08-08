@@ -238,7 +238,7 @@ export function MessageInbox() {
                 <div className="mt-3 flex items-center justify-between gap-3"><div className="flex gap-3 text-xs text-zinc-400"><label><input checked={isStarred} onChange={(event) => setIsStarred(event.target.checked)} type="checkbox" /> {t("messages.starred")}</label><label><input checked={isArchived} onChange={(event) => setIsArchived(event.target.checked)} type="checkbox" /> {t("messages.archived")}</label></div><button className="rounded bg-cyan-300 px-3 py-1.5 text-xs font-bold text-zinc-950" onClick={() => void saveThreadLinks()}>{t("messages.saveLinks")}</button></div>
               </div>
               <div className="max-h-[calc(100vh-25rem)] space-y-3 overflow-y-auto py-6 pr-2">
-                {messages.length === 0 ? <p className="text-sm text-zinc-500">{t("messages.noMessages")}</p> : messages.map((message) => (
+                {messages.length === 0 ? <p className="text-sm text-zinc-500">{t("messages.noMessages")}</p> : [...messages].reverse().map((message) => (
                   <div className={`max-w-[85%] rounded-md border border-zinc-800 p-3 ${message.direction === "outbound" ? "ml-auto bg-cyan-300/10" : "bg-zinc-900"}`} key={message.id}>
                     <div className="flex justify-between gap-4 text-xs text-zinc-500"><span>{message.sender_name || t("messages.unknownSender")}</span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
                     <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${expandedMessages.has(message.id) ? "" : "max-h-32 overflow-hidden"}`}>{message.body_text}</p>
