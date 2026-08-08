@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Improve long message thread readability with bounded scrolling and expandable message bodies.
 - Prevent IMAP sync from merging unrelated emails when References headers do not resolve to an imported parent message.
 ### Added
 - Upgraded the upgrade branch to Next.js 15.5.23 and React 19.2.8, including async request cookies, Promise-based dynamic route params, and offline-safe font loading.

@@ -64,6 +64,7 @@ export function MessageInbox() {
   const [isArchived, setIsArchived] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [syncStatus, setSyncStatus] = useState<"" | "error" | "loading" | "success">("");
+  const [expandedMessages, setExpandedMessages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const controller = new AbortController();
@@ -114,6 +115,7 @@ export function MessageInbox() {
       })
       .catch(() => undefined);
     void fetch(`/api/messages/threads/${selected.id}`, { method: "PATCH" });
+    setExpandedMessages(new Set());
     return () => controller.abort();
   }, [selected?.id]);
 
@@ -220,8 +222,9 @@ export function MessageInbox() {
           </div>
           <article className="hidden min-w-0 flex-1 p-6 md:block">
             {selected ? <>
-              <div className="flex items-start justify-between border-b border-zinc-800 pb-4">
+              <div className="sticky top-0 z-10 flex items-start justify-between border-b border-zinc-800 bg-zinc-950 pb-4">
                 <div><p className="text-xs uppercase tracking-wider text-cyan-300">{providerLabel(selected.provider)}</p><h1 className="mt-1 text-xl font-bold text-white">{selected.subject || t("messages.noSubject")}</h1></div>
+                <span className="text-xs text-zinc-500">{messages.length} {t("messages.messageCount")}</span>
                 <button className="rounded p-2 text-zinc-500 hover:bg-zinc-800 hover:text-white" title={t("messages.attachments")}><Paperclip size={17} /></button>
               </div>
               <div className="border-b border-zinc-800 py-4">
@@ -234,11 +237,12 @@ export function MessageInbox() {
                 </div>
                 <div className="mt-3 flex items-center justify-between gap-3"><div className="flex gap-3 text-xs text-zinc-400"><label><input checked={isStarred} onChange={(event) => setIsStarred(event.target.checked)} type="checkbox" /> {t("messages.starred")}</label><label><input checked={isArchived} onChange={(event) => setIsArchived(event.target.checked)} type="checkbox" /> {t("messages.archived")}</label></div><button className="rounded bg-cyan-300 px-3 py-1.5 text-xs font-bold text-zinc-950" onClick={() => void saveThreadLinks()}>{t("messages.saveLinks")}</button></div>
               </div>
-              <div className="space-y-4 py-6">
+              <div className="max-h-[calc(100vh-25rem)] space-y-3 overflow-y-auto py-6 pr-2">
                 {messages.length === 0 ? <p className="text-sm text-zinc-500">{t("messages.noMessages")}</p> : messages.map((message) => (
                   <div className={`max-w-[85%] rounded-md border border-zinc-800 p-3 ${message.direction === "outbound" ? "ml-auto bg-cyan-300/10" : "bg-zinc-900"}`} key={message.id}>
                     <div className="flex justify-between gap-4 text-xs text-zinc-500"><span>{message.sender_name || t("messages.unknownSender")}</span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
-                    <p className="mt-2 whitespace-pre-wrap text-sm text-zinc-200">{message.body_text}</p>
+                    <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${expandedMessages.has(message.id) ? "" : "max-h-32 overflow-hidden"}`}>{message.body_text}</p>
+                    {message.body_text.length > 700 ? <button className="mt-2 text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => setExpandedMessages((current) => { const next = new Set(current); if (next.has(message.id)) next.delete(message.id); else next.add(message.id); return next; })} type="button">{expandedMessages.has(message.id) ? t("messages.collapseMessage") : t("messages.expandMessage")}</button> : null}
                     {message.message_attachments?.length ? <div className="mt-3 space-y-1 border-t border-zinc-700 pt-2">{message.message_attachments.map((file) => <a className="block text-xs font-semibold text-cyan-300 hover:text-cyan-100" href={`/api/messages/attachments/${file.id}`} key={file.id} rel="noreferrer" target="_blank">{file.file_name}</a>)}</div> : null}
                   </div>
                 ))}
