@@ -19,6 +19,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Verify optimized thread-detail loading against the previously failing email thread.
 - [ ] Repair the existing incorrectly merged email thread after confirming its message boundaries.
 - [ ] Add a safe rich-HTML email viewer with size limits and sanitization before exposing stored `body_html`.
+- [x] Add a safe rich-HTML email viewer with size limits and sanitization before exposing stored `body_html`.
 - [x] Improve long message thread readability with bounded scrolling and expandable message bodies.
 - [x] Show the newest message first in the message reader.
 - [ ] Apply `20260807060000_grant_unified_messages_access.sql` in the connected Supabase project before retesting Messages.

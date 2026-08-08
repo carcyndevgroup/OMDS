@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add an opt-in sanitized, size-limited formatted email view without loading large HTML bodies by default.
 - Show image attachments inline in message threads while retaining download links for every file.
 - Persist inbound IMAP attachments in the existing message attachment storage flow.
 - Show the newest message first when reading a conversation.
