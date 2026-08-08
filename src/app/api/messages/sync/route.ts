@@ -5,6 +5,8 @@ import type { InboundEmail } from "@/core/messages/email-adapter";
 import { createServerSupabaseClient } from "@/core/supabase/server-client";
 
 type ConnectionSettings = { imapCursor?: string };
+const ATTACHMENT_BUCKET = "message-attachments";
+const maxAttachmentBytes = 25 * 1024 * 1024;
 
 const findOrCreateThread = async (database: Awaited<ReturnType<typeof createServerSupabaseClient>>, email: InboundEmail, connectionId: string) => {
   const references = [...(email.inReplyTo ? [email.inReplyTo] : []), ...email.references];
@@ -105,6 +107,28 @@ export async function POST() {
       thread_id: threadId,
     }).select("id").single();
     if (message.error) throw new Error("message_create_failed");
+
+    for (const attachment of email.attachments) {
+      if (attachment.content.byteLength > maxAttachmentBytes) continue;
+      const safeName = attachment.fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const path = `${threadId}/${message.data.id}/${crypto.randomUUID()}-${safeName}`;
+      const upload = await database.storage.from(ATTACHMENT_BUCKET).upload(path, attachment.content, {
+        contentType: attachment.contentType || "application/octet-stream",
+        upsert: false,
+      });
+      if (upload.error) throw new Error("attachment_upload_failed");
+      const attachmentRow = await database.from("message_attachments").insert({
+        byte_size: attachment.content.byteLength,
+        content_type: attachment.contentType || "application/octet-stream",
+        file_name: attachment.fileName,
+        message_id: message.data.id,
+        storage_path: path,
+      });
+      if (attachmentRow.error) {
+        await database.storage.from(ATTACHMENT_BUCKET).remove([path]);
+        throw new Error("attachment_record_failed");
+      }
+    }
 
     await database.from("message_participants").insert([
       { address: email.from.address, display_name: email.from.name ?? "", participant_role: "from", thread_id: threadId },
