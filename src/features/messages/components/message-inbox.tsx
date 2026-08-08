@@ -66,6 +66,12 @@ export function MessageInbox() {
   const [syncStatus, setSyncStatus] = useState<"" | "error" | "loading" | "success">("");
   const [expandedMessages, setExpandedMessages] = useState<Set<string>>(new Set());
   const [htmlMessages, setHtmlMessages] = useState<Record<string, string>>({});
+  const [isComposing, setIsComposing] = useState(false);
+  const [composeTo, setComposeTo] = useState("");
+  const [composeSubject, setComposeSubject] = useState("");
+  const [composeBody, setComposeBody] = useState("");
+  const [composeFile, setComposeFile] = useState<File | null>(null);
+  const [composeStatus, setComposeStatus] = useState<"" | "error" | "success">("");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -172,6 +178,19 @@ export function MessageInbox() {
     }
   };
 
+  const sendComposedMessage = async () => {
+    if (!composeTo.trim() || !composeSubject.trim() || !composeBody.trim()) return;
+    setComposeStatus("");
+    const form = new FormData();
+    form.set("to", composeTo);
+    form.set("subject", composeSubject);
+    form.set("body", composeBody);
+    if (composeFile) form.set("file", composeFile);
+    const response = await fetch("/api/messages/compose", { body: form, method: "POST" });
+    if (!response.ok) { setComposeStatus("error"); return; }
+    setComposeTo(""); setComposeSubject(""); setComposeBody(""); setComposeFile(null); setComposeStatus("success"); setRefreshKey((current) => current + 1);
+  };
+
   useEffect(() => {
     const interval = window.setInterval(() => {
       void syncMailbox();
@@ -182,7 +201,7 @@ export function MessageInbox() {
   return (
     <div className="flex min-h-[calc(100vh-7rem)] overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-2xl shadow-black/20">
       <aside className="w-56 shrink-0 border-r border-zinc-800 bg-zinc-900/70 p-4">
-        <button className="mb-5 flex w-full items-center justify-center gap-2 rounded-md bg-cyan-300 px-3 py-2 text-sm font-bold text-zinc-950">
+        <button className="mb-5 flex w-full items-center justify-center gap-2 rounded-md bg-cyan-300 px-3 py-2 text-sm font-bold text-zinc-950" onClick={() => { setIsComposing(true); setComposeStatus(""); }} type="button">
           <Mail aria-hidden="true" size={16} /> {t("messages.compose")}
         </button>
         <button className="mb-5 flex w-full items-center justify-center gap-2 rounded-md border border-zinc-700 px-3 py-2 text-sm font-bold text-zinc-300 hover:border-cyan-300 hover:text-cyan-200" disabled={syncStatus === "loading"} onClick={() => void syncMailbox()} type="button">
@@ -198,6 +217,8 @@ export function MessageInbox() {
           ))}
         </nav>
       </aside>
+
+      {isComposing ? <div className="fixed inset-0 z-20 flex items-start justify-center bg-black/60 p-6" role="dialog"><div className="mt-12 w-full max-w-xl rounded-lg border border-zinc-700 bg-zinc-900 p-5 shadow-2xl"><div className="flex items-center justify-between"><h2 className="text-lg font-bold text-white">{t("messages.compose")}</h2><button className="text-zinc-400 hover:text-white" onClick={() => setIsComposing(false)} type="button">×</button></div><div className="mt-4 space-y-3"><input className="w-full rounded border border-zinc-700 bg-zinc-950 p-2 text-sm text-white" onChange={(event) => setComposeTo(event.target.value)} placeholder={t("messages.recipient")} value={composeTo} /><input className="w-full rounded border border-zinc-700 bg-zinc-950 p-2 text-sm text-white" onChange={(event) => setComposeSubject(event.target.value)} placeholder={t("messages.subject")} value={composeSubject} /><textarea className="min-h-40 w-full rounded border border-zinc-700 bg-zinc-950 p-2 text-sm text-white" onChange={(event) => setComposeBody(event.target.value)} placeholder={t("messages.composePlaceholder")} value={composeBody} /><label className="flex cursor-pointer items-center gap-2 text-xs text-zinc-400"><Paperclip size={15} />{composeFile?.name ?? t("messages.attachFile")}<input className="sr-only" onChange={(event) => setComposeFile(event.target.files?.[0] ?? null)} type="file" /></label></div><div className="mt-4 flex justify-end gap-2"><button className="rounded border border-zinc-700 px-3 py-2 text-sm text-zinc-300" onClick={() => setIsComposing(false)} type="button">{t("messages.cancel")}</button><button className="rounded bg-cyan-300 px-3 py-2 text-sm font-bold text-zinc-950 disabled:opacity-50" disabled={!composeTo.trim() || !composeSubject.trim() || !composeBody.trim()} onClick={() => void sendComposedMessage()} type="button">{t("messages.send")}</button></div>{composeStatus === "error" ? <p className="mt-3 text-xs text-rose-300">{t("messages.composeError")}</p> : composeStatus === "success" ? <p className="mt-3 text-xs text-emerald-300">{t("messages.composeSent")}</p> : null}</div></div> : null}
 
       <section className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-3 border-b border-zinc-800 px-4 py-3">

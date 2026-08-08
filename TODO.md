@@ -58,6 +58,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Add outbound delivery and scheduled/background execution around the authenticated inbound sync route. The sync route now persists IMAP cursor state, threads, participants, and inbound messages once mailbox credentials are available.
 - [x] Send outbound thread replies through configured SMTP and persist the provider message ID.
 - [x] Include outbound reply attachments in SMTP delivery and local attachment storage.
+- [x] Add new-message composition with SMTP delivery and optional attachments.
 - [x] Add five-minute mailbox polling while the Messages view is open.
 - [x] Add a protected scheduler entry point for mailbox sync; deployment cron configuration remains environment-specific.
 - [x] Configure Vercel Cron for five-minute mailbox sync.

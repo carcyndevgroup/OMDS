@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add a functional Compose flow for new SMTP messages with optional attachments.
 - Configure Vercel Cron to run protected mailbox sync every five minutes.
 - Allow protected scheduler calls to run mailbox sync with `x-cron-secret` while preserving authenticated manual sync.
 - Include reply attachments in SMTP delivery and persist them in the outbound message record.
