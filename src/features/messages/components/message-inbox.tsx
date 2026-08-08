@@ -2,6 +2,7 @@
 
 import { Archive, Inbox, Link2, Mail, Menu, Paperclip, RefreshCw, Search, Send, Star } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { useTranslation, type TranslationKey } from "@/core/i18n";
 
@@ -49,6 +50,7 @@ const providerLabel = (provider: string) => provider === "email" ? "Email" : pro
 
 export function MessageInbox() {
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
   const [threads, setThreads] = useState<Thread[]>([]);
   const [view, setView] = useState<View>("inbox");
   const [query, setQuery] = useState("");
@@ -75,6 +77,11 @@ export function MessageInbox() {
   const [composeBody, setComposeBody] = useState("");
   const [composeFile, setComposeFile] = useState<File | null>(null);
   const [composeStatus, setComposeStatus] = useState<"" | "error" | "success">("");
+
+  useEffect(() => {
+    const thread = searchParams.get("thread");
+    if (thread) setSelectedId(thread);
+  }, [searchParams]);
 
   useEffect(() => {
     const controller = new AbortController();

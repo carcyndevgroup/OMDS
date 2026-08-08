@@ -6,6 +6,7 @@ import type { Translate } from "../components/lead-form-types";
 import type { Lead } from "../types/lead";
 import type { LeadDetailTab } from "./lead-detail-types";
 import { LeadOverview } from "./lead-overview";
+import { LeadMessages } from "./lead-messages";
 
 type LeadTabContentProps = {
   activeTab: LeadDetailTab;
@@ -29,9 +30,7 @@ export function LeadTabContent({
   const title = t(
     isNotes ? "crm.lead.detail.tab.notes" : "crm.lead.detail.tab.messages",
   );
-  const content = isNotes
-    ? lead.notes || t("crm.lead.detail.empty.notes")
-    : t("crm.lead.detail.empty.messages");
+  const content = isNotes ? lead.notes || t("crm.lead.detail.empty.notes") : null;
 
   return (
     <section className="rounded-lg border border-zinc-800 bg-zinc-900 p-5 shadow-2xl shadow-black/20 sm:p-6">
@@ -39,9 +38,7 @@ export function LeadTabContent({
         <Icon aria-hidden="true" className="text-cyan-200" size={20} />
         <h2 className="text-lg font-bold text-white">{title}</h2>
       </div>
-      <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-300">
-        {content}
-      </p>
+      {isNotes ? <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-300">{content}</p> : <LeadMessages leadId={lead.id} t={t} />}
     </section>
   );
 }

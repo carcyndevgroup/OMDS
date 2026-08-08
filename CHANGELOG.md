@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Populate the Lead Messages tab from CRM-linked email threads.
 - Improve CRM link clarity with selected record labels and contextual guidance.
 - Show sender name and email address in message lists and open conversations.
 - Add a functional Compose flow for new SMTP messages with optional attachments.
