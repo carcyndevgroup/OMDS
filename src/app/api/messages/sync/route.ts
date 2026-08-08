@@ -43,10 +43,15 @@ const findOrCreateThread = async (database: Awaited<ReturnType<typeof createServ
   return created.data.id;
 };
 
-export async function POST() {
+const isScheduledRequest = (request: Request) => {
+  const configuredSecret = process.env.CRON_SECRET;
+  return Boolean(configuredSecret && request.headers.get("x-cron-secret") === configuredSecret);
+};
+
+export async function POST(request: Request) {
   const database = await createServerSupabaseClient();
   const user = await database.auth.getUser();
-  if (user.error || !user.data.user) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
+  if (!isScheduledRequest(request) && (user.error || !user.data.user)) return NextResponse.json({ code: "unauthorized" }, { status: 401 });
 
   const adapterResult = getEmailAdapter();
   if (!adapterResult.adapter || !adapterResult.config) {

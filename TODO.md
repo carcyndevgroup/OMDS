@@ -59,6 +59,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Send outbound thread replies through configured SMTP and persist the provider message ID.
 - [x] Include outbound reply attachments in SMTP delivery and local attachment storage.
 - [x] Add five-minute mailbox polling while the Messages view is open.
+- [x] Add a protected scheduler entry point for mailbox sync; deployment cron configuration remains environment-specific.
 - [ ] Define task module scope: manual tasks, event tasks, workflow-generated tasks, and due dates.
 - [ ] Add workflow-generated tasks for high-value moments only after the booking and SAT flows are stable.
 
