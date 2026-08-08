@@ -59,10 +59,11 @@ export class ImapSmtpEmailAdapter implements EmailAdapter {
             bodyHtml: typeof parsed.html === "string" ? parsed.html : undefined,
             bodyText: parsed.text ?? "",
             from: address(parsed.from?.value[0]),
+            inReplyTo: parsed.inReplyTo,
             messageId: parsed.messageId ?? `imap-${message.uid}`,
+            references: parsed.references ? (Array.isArray(parsed.references) ? parsed.references : [parsed.references]) : [],
             receivedAt: (parsed.date ?? new Date()).toISOString(),
             subject: parsed.subject ?? "",
-            threadId: parsed.references?.[0] ?? parsed.inReplyTo ?? undefined,
             to: parsed.to && !Array.isArray(parsed.to) ? parsed.to.value.map(address) : [],
           });
           if (emails.length >= maxEmailsPerSync) break;

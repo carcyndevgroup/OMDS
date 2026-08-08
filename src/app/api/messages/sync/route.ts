@@ -7,7 +7,14 @@ import { createServerSupabaseClient } from "@/core/supabase/server-client";
 type ConnectionSettings = { imapCursor?: string };
 
 const findOrCreateThread = async (database: Awaited<ReturnType<typeof createServerSupabaseClient>>, email: InboundEmail, connectionId: string) => {
-  const providerThreadId = email.threadId ?? email.messageId;
+  const references = [...(email.inReplyTo ? [email.inReplyTo] : []), ...email.references];
+  const parent = references.length
+    ? await database.from("messages").select("thread_id").in("provider_message_id", references).limit(1).maybeSingle()
+    : { data: null, error: null };
+  if (parent.error) throw new Error("message_parent_lookup_failed");
+  if (parent.data) return parent.data.thread_id;
+
+  const providerThreadId = email.messageId;
   const existing = await database
     .from("message_threads")
     .select("id")

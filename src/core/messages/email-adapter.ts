@@ -14,10 +14,11 @@ export type InboundEmail = {
   bodyHtml?: string;
   bodyText: string;
   from: EmailAddress;
+  inReplyTo?: string;
   messageId: string;
+  references: string[];
   receivedAt: string;
   subject: string;
-  threadId?: string;
   to: EmailAddress[];
 };
 

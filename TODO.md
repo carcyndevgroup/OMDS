@@ -13,8 +13,9 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Repeat mailbox sync until the Zoho inbox is fully imported after the 50-email batch limit.
 - [ ] Confirm the sync button reports completion without requiring a browser refresh.
 - [ ] Confirm the initial test batch shows current Zoho messages, then decide whether historical backfill should remain available.
-- [ ] Investigate why some thread-detail requests exceed 12 seconds and return 500, including the nested attachment query.
+- [x] Investigate why some thread-detail requests exceed 12 seconds and return 500, including the nested attachment query.
 - [ ] Verify optimized thread-detail loading against the previously failing email thread.
+- [ ] Repair the existing incorrectly merged email thread after confirming its message boundaries.
 - [ ] Add a safe rich-HTML email viewer with size limits and sanitization before exposing stored `body_html`.
 - [ ] Apply `20260807060000_grant_unified_messages_access.sql` in the connected Supabase project before retesting Messages.
 - [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
