@@ -34,5 +34,14 @@ export async function GET(request: Request) {
   if (result.error) {
     return NextResponse.json({ code: "message_threads_load_failed" }, { status: 500 });
   }
-  return NextResponse.json({ data: result.data });
+  const threadIds = result.data.map((thread) => thread.id);
+  const latestMessages = threadIds.length
+    ? await database.from("messages").select("thread_id, sender_address, sender_name, sent_at").in("thread_id", threadIds).order("sent_at", { ascending: false })
+    : { data: [], error: null };
+  if (latestMessages.error) return NextResponse.json({ code: "message_thread_senders_load_failed" }, { status: 500 });
+  const senderByThread = new Map<string, (typeof latestMessages.data)[number]>();
+  for (const message of latestMessages.data) {
+    if (!senderByThread.has(message.thread_id)) senderByThread.set(message.thread_id, message);
+  }
+  return NextResponse.json({ data: result.data.map((thread) => ({ ...thread, latest_sender_address: senderByThread.get(thread.id)?.sender_address ?? "", latest_sender_name: senderByThread.get(thread.id)?.sender_name ?? "" })) });
 }

@@ -22,6 +22,8 @@ type Thread = {
   event_id: string | null;
   assigned_to: string | null;
   is_archived: boolean;
+  latest_sender_address: string;
+  latest_sender_name: string;
 };
 
 type Message = {
@@ -29,6 +31,7 @@ type Message = {
   body_text: string;
   direction: "inbound" | "outbound";
   id: string;
+  sender_address: string;
   sender_name: string;
   sent_at: string;
 };
@@ -235,10 +238,10 @@ export function MessageInbox() {
             {isLoading ? <p className="p-6 text-sm text-zinc-500">{t("messages.loading")}</p> : threads.length === 0 ? <p className="p-6 text-sm text-zinc-500">{t("messages.empty")}</p> : threads.map((thread) => (
               <button className={`block w-full border-b border-zinc-800/80 px-4 py-3 text-left hover:bg-zinc-900 ${selected?.id === thread.id ? "bg-cyan-300/5" : ""}`} key={thread.id} onClick={() => setSelectedId(thread.id)}>
                 <div className="flex items-center justify-between gap-3">
-                  <span className={`truncate text-sm ${thread.unread_count > 0 ? "font-bold text-white" : "text-zinc-300"}`}>{providerLabel(thread.provider)}</span>
+                  <span className={`truncate text-sm ${thread.unread_count > 0 ? "font-bold text-white" : "text-zinc-300"}`}>{thread.latest_sender_name || thread.latest_sender_address || providerLabel(thread.provider)}</span>
                   <time className="shrink-0 text-[11px] text-zinc-600">{new Date(thread.last_message_at).toLocaleDateString()}</time>
                 </div>
-                <p className="mt-1 truncate text-sm font-semibold text-zinc-200">{thread.subject || t("messages.noSubject")}</p>
+                <p className="mt-1 truncate text-xs text-zinc-500">{thread.latest_sender_address}</p><p className="mt-1 truncate text-sm font-semibold text-zinc-200">{thread.subject || t("messages.noSubject")}</p>
                 <p className="mt-1 truncate text-xs text-zinc-500">{thread.preview}</p>
               </button>
             ))}
@@ -263,7 +266,7 @@ export function MessageInbox() {
               <div className="max-h-[calc(100vh-25rem)] space-y-3 overflow-y-auto py-6 pr-2">
                 {messages.length === 0 ? <p className="text-sm text-zinc-500">{t("messages.noMessages")}</p> : [...messages].reverse().map((message) => (
                   <div className={`max-w-[85%] rounded-md border border-zinc-800 p-3 ${message.direction === "outbound" ? "ml-auto bg-cyan-300/10" : "bg-zinc-900"}`} key={message.id}>
-                    <div className="flex justify-between gap-4 text-xs text-zinc-500"><span>{message.sender_name || t("messages.unknownSender")}</span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
+                    <div className="flex justify-between gap-4 text-xs text-zinc-500"><span><span className="mr-1 text-zinc-600">{t("messages.from")}:</span>{message.sender_name || t("messages.unknownSender")}<span className="ml-1 text-zinc-600">&lt;{message.sender_address}&gt;</span></span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
                     <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${expandedMessages.has(message.id) ? "" : "max-h-32 overflow-hidden"}`}>{message.body_text}</p>
                     {message.body_text.length > 700 ? <button className="mt-2 text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => setExpandedMessages((current) => { const next = new Set(current); if (next.has(message.id)) next.delete(message.id); else next.add(message.id); return next; })} type="button">{expandedMessages.has(message.id) ? t("messages.collapseMessage") : t("messages.expandMessage")}</button> : null}
                     {htmlMessages[message.id] ? <div className="mt-3 max-h-96 overflow-auto rounded border border-zinc-700 bg-white p-3 text-sm text-zinc-900" dangerouslySetInnerHTML={{ __html: htmlMessages[message.id] }} /> : <button className="mt-2 block text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => void fetch(`/api/messages/messages/${message.id}/html`).then(async (response) => { if (!response.ok) return; const result = await response.json() as { data?: { bodyHtml?: string | null } }; if (result.data?.bodyHtml) setHtmlMessages((current) => ({ ...current, [message.id]: result.data?.bodyHtml ?? "" })); })} type="button">{t("messages.viewFormatted")}</button>}
