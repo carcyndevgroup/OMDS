@@ -57,6 +57,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [ ] Add server environment values for `EMAIL_ADDRESS`, `EMAIL_IMAP_HOST`, `EMAIL_IMAP_USERNAME`, `EMAIL_IMAP_PASSWORD`, `EMAIL_SMTP_HOST`, and optional SMTP/IMAP ports, TLS, and credentials before implementing live mailbox sync. Settings now surfaces persisted provider status and safe email adapter readiness.
 - [ ] Add outbound delivery and scheduled/background execution around the authenticated inbound sync route. The sync route now persists IMAP cursor state, threads, participants, and inbound messages once mailbox credentials are available.
 - [x] Send outbound thread replies through configured SMTP and persist the provider message ID.
+- [x] Add five-minute mailbox polling while the Messages view is open.
 - [ ] Define task module scope: manual tasks, event tasks, workflow-generated tasks, and due dates.
 - [ ] Add workflow-generated tasks for high-value moments only after the booking and SAT flows are stable.
 

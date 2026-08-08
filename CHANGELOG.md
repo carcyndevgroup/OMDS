@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Refresh the open Messages view with an automatic five-minute mailbox sync.
 - Send message replies through configured SMTP before recording them as delivered outbound messages.
 - Add an opt-in sanitized, size-limited formatted email view without loading large HTML bodies by default.
 - Show image attachments inline in message threads while retaining download links for every file.

@@ -179,6 +179,13 @@ export function MessageInbox() {
     }
   };
 
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      void syncMailbox();
+    }, 5 * 60 * 1000);
+    return () => window.clearInterval(interval);
+  }, []);
+
   return (
     <div className="flex min-h-[calc(100vh-7rem)] overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950 shadow-2xl shadow-black/20">
       <aside className="w-56 shrink-0 border-r border-zinc-800 bg-zinc-900/70 p-4">
