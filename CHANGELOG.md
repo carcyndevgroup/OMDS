@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add lead-scoped email composition with active templates, editable preview, local draft saving, and SMTP send.
 - Populate the Lead Messages tab from CRM-linked email threads.
 - Improve CRM link clarity with selected record labels and contextual guidance.
 - Show sender name and email address in message lists and open conversations.

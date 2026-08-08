@@ -38,7 +38,7 @@ export function LeadTabContent({
         <Icon aria-hidden="true" className="text-cyan-200" size={20} />
         <h2 className="text-lg font-bold text-white">{title}</h2>
       </div>
-      {isNotes ? <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-300">{content}</p> : <LeadMessages leadId={lead.id} t={t} />}
+      {isNotes ? <p className="whitespace-pre-wrap text-sm leading-7 text-zinc-300">{content}</p> : <LeadMessages lead={lead} t={t} />}
     </section>
   );
 }

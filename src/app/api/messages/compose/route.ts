@@ -5,7 +5,7 @@ import { createServerSupabaseClient } from "@/core/supabase/server-client";
 
 const bucket = "message-attachments";
 const maxAttachmentBytes = 25 * 1024 * 1024;
-type ComposePayload = { body?: unknown; file?: File; subject?: unknown; to?: unknown };
+type ComposePayload = { body?: unknown; file?: File; leadId?: unknown; subject?: unknown; to?: unknown };
 
 export async function POST(request: Request) {
   const database = await createServerSupabaseClient();
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   try {
     const form = await request.formData();
     const file = form.get("file");
-    payload = { body: form.get("body"), file: file instanceof File ? file : undefined, subject: form.get("subject"), to: form.get("to") };
+    payload = { body: form.get("body"), file: file instanceof File ? file : undefined, leadId: form.get("leadId"), subject: form.get("subject"), to: form.get("to") };
   } catch {
     return NextResponse.json({ code: "invalid_form" }, { status: 400 });
   }
@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
   const now = new Date().toISOString();
   const connection = await database.from("message_connections").select("id").eq("provider", "email").maybeSingle();
-  const thread = await database.from("message_threads").insert({ connection_id: connection.data?.id ?? null, preview: payload.body.trim().slice(0, 240), provider: "email", provider_thread_id: delivery.providerMessageId, subject: payload.subject.trim(), last_message_at: now }).select("id").single();
+  const thread = await database.from("message_threads").insert({ connection_id: connection.data?.id ?? null, lead_id: typeof payload.leadId === "string" ? payload.leadId : null, preview: payload.body.trim().slice(0, 240), provider: "email", provider_thread_id: delivery.providerMessageId, subject: payload.subject.trim(), last_message_at: now }).select("id").single();
   if (thread.error) return NextResponse.json({ code: "thread_create_failed_after_delivery" }, { status: 500 });
   const message = await database.from("messages").insert({ body_text: payload.body.trim(), direction: "outbound", provider_message_id: delivery.providerMessageId, sender_address: adapterResult.config.address, sender_name: adapterResult.config.address, subject: payload.subject.trim(), thread_id: thread.data.id, sent_at: now }).select("*").single();
   if (message.error) return NextResponse.json({ code: "message_create_failed_after_delivery" }, { status: 500 });
