@@ -23,6 +23,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Improve long message thread readability with bounded scrolling and expandable message bodies.
 - [x] Show the newest message first in the message reader.
 - [ ] Apply `20260807060000_grant_unified_messages_access.sql` in the connected Supabase project before retesting Messages.
+- [ ] Apply `20260809030000_grant_crm_activity_log_access.sql` in the connected Supabase project before retesting Lead and Client Activity logs.
 - [ ] Complete production smoke testing for the Next.js 16 / React 19 branch. Public, login, and not-found routes pass locally; authenticated workflows and deployment checks remain.
 - [ ] Test direct booking flow from client creation through confirmed event. *(Re-test contract creation path after resolver fallback fix.)*
 - [ ] Test PV booking flow from client creation through confirmed event and auto-created SAT/Factura.

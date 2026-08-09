@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add authenticated and service-role table grants for CRM Activity log reads and writes.
 - Show complete email message bodies by default in the open Messages thread; long messages remain collapsible.
 - Associate transferred Lead message threads with the new Client and Event records.
 - Make outbound compose persistence retry-aware by reusing existing provider-linked threads and messages after SMTP delivery.
