@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Confirm converted Lead message history remains correctly scoped to the Client after the Client thread-filter fix.
 - Fix Client Messages filtering so a Client record shows only threads linked to that Client instead of the global inbox.
 - Verify converted Lead email history appears in the Client Messages tab with unified thread previews.
 - Add authenticated and service-role table grants for CRM Activity log reads and writes.
