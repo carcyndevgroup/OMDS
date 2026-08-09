@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Refactor the Lead CRM email composer with sanitized client-facing HTML preview and optional attachment sending.
 - Add the required Suspense boundary for Messages query-parameter compose and thread navigation.
 - Repair Client composer JSX and add sanitized HTML preview plus attachment support.
 - Add inline Client email thread reading, attachment access, and SMTP replies.
