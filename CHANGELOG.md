@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add Client-scoped email composition with templates, preview, server-side drafts, and Client-linked sending.
 - Link CRM email address fields to the Messages composer with recipient prefill.
 - Transfer Lead-linked email threads and existing Lead notes during conversion.
 - Extend server-side message drafts and CRM email composition to support Client ownership.

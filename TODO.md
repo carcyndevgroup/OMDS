@@ -65,7 +65,18 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Add lead-scoped email composition with template selection, preview, local draft saving, and send.
 - [x] Keep lead-scoped composition accessible from an empty Messages tab.
 - [x] Add server-side email draft persistence for the Lead message composer.
-- [ ] Add the Client-scoped general email composer UI using the persisted draft API.
+- [x] Add the Client-scoped general email composer UI using the persisted draft API.
+- [ ] Replace the Client Messages tab legacy event-draft list with unified client-linked email threads.
+- [ ] Add inline Client thread reading, replies, and attachment access.
+- [ ] Add template token substitution for Lead, Client, Event, and booking data in CRM composers.
+- [ ] Render sanitized HTML in CRM composer previews to match client-facing email output.
+- [ ] Add attachment selection to Lead and Client CRM composers.
+- [ ] Verify converted Lead threads, messages, participants, and attachments appear in Client Messages.
+- [ ] Harden compose persistence when SMTP delivery succeeds but local database persistence fails.
+- [ ] Complete Zoho historical backfill and duplicate-handling verification after the 50-message batch limit.
+- [ ] Verify sync completion status updates without requiring a browser refresh.
+- [ ] Verify optimized loading for the previously slow large email thread.
+- [ ] Complete authenticated production smoke testing for mailbox sync, compose, replies, and attachments.
 - [x] Transfer Lead-linked messages and existing Lead notes to the converted Client event.
 - [x] Link planner, venue-contact, client, and event-contact email fields to Messages compose.
 - [x] Add five-minute mailbox polling while the Messages view is open.

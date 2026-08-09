@@ -7,6 +7,7 @@ import { useMessageDraftMutation } from "../../messages/hooks/use-message-draft-
 import type { MessageDraft } from "../../messages/types/message-draft";
 import { ClientDetailSection } from "./client-detail-section";
 import type { ClientDetailSectionProps } from "./client-detail-types";
+import { ClientEmailComposer } from "./client-email-composer";
 
 const kindKeys = {
   contract: "crm.client.detail.messages.kind.contract",
@@ -28,18 +29,19 @@ export function ClientMessagesTab(props: ClientDetailSectionProps) {
   if (!eventId) {
     return (
       <ClientDetailSection title={t("crm.client.detail.tab.messages")}>
+        <ClientEmailComposer client={client} t={t} />
         <p className="text-sm text-zinc-500">{t("crm.client.detail.empty.event")}</p>
       </ClientDetailSection>
     );
   }
 
-  return <MessageList eventId={eventId} locale={locale} t={t} />;
+  return <MessageList client={client} eventId={eventId} locale={locale} t={t} />;
 }
 
-function MessageList(props: Pick<ClientDetailSectionProps, "locale" | "t"> & {
+function MessageList(props: Pick<ClientDetailSectionProps, "client" | "locale" | "t"> & {
   eventId: string;
 }) {
-  const { eventId, locale, t } = props;
+  const { client, eventId, locale, t } = props;
   const state = useEventMessageDrafts(eventId);
   const mutation = useMessageDraftMutation(eventId);
 
@@ -51,6 +53,7 @@ function MessageList(props: Pick<ClientDetailSectionProps, "locale" | "t"> & {
   return (
     <ClientDetailSection title={t("crm.client.detail.tab.messages")}>
       <div className="space-y-5">
+        <ClientEmailComposer client={client} t={t} />
         {state.isLoading ? <p className="text-sm text-zinc-500">{t("crm.client.detail.messages.loading")}</p> : null}
         {state.hasError ? <p className="text-sm text-rose-300">{t("crm.client.detail.messages.loadError")}</p> : null}
         {!state.isLoading && state.drafts.length === 0 ? (
