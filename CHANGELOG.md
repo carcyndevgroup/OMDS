@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Verify converted Lead email history appears in the Client Messages tab with unified thread previews.
 - Add authenticated and service-role table grants for CRM Activity log reads and writes.
 - Show complete email message bodies by default in the open Messages thread; long messages remain collapsible.
 - Associate transferred Lead message threads with the new Client and Event records.
