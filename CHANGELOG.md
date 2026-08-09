@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Transfer Lead-linked email threads and existing Lead notes during conversion.
 - Extend server-side message drafts and CRM email composition to support Client ownership.
 - Persist Lead email drafts server-side per authenticated staff user and Lead.
 - Keep lead email composition available when no linked message threads exist.

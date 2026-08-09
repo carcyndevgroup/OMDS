@@ -34,6 +34,22 @@ export async function POST(request: NextRequest, props: ConvertLeadRouteContext)
   }
 
   const database = await createServerSupabaseClient();
+  const lead = await database.from("leads").select("notes").eq("id", params.id).maybeSingle();
+  const threadTransfer = await database
+    .from("message_threads")
+    .update({ client_id: result.ids.clientId, lead_id: null, updated_at: new Date().toISOString() })
+    .eq("lead_id", params.id);
+  if (threadTransfer.error) {
+    return NextResponse.json({ code: "lead_messages_transfer_failed" }, { status: 500 });
+  }
+  if (lead.data?.notes?.trim()) {
+    const eventUpdate = await database
+      .from("events")
+      .update({ notes: lead.data.notes })
+      .eq("id", result.ids.eventId)
+      .eq("notes", "");
+    if (eventUpdate.error) return NextResponse.json({ code: "lead_notes_transfer_failed" }, { status: 500 });
+  }
   await Promise.all([
     database.rpc("record_crm_activity", {
       target_entity: "leads",
