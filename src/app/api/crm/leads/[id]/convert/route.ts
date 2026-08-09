@@ -34,7 +34,10 @@ export async function POST(request: NextRequest, props: ConvertLeadRouteContext)
   }
 
   const database = await createServerSupabaseClient();
-  const lead = await database.from("leads").select("notes").eq("id", params.id).maybeSingle();
+  const [lead, event] = await Promise.all([
+    database.from("leads").select("notes").eq("id", params.id).maybeSingle(),
+    database.from("events").select("notes").eq("id", result.ids.eventId).maybeSingle(),
+  ]);
   const threadTransfer = await database
     .from("message_threads")
     .update({ client_id: result.ids.clientId, lead_id: null, updated_at: new Date().toISOString() })
@@ -43,11 +46,14 @@ export async function POST(request: NextRequest, props: ConvertLeadRouteContext)
     return NextResponse.json({ code: "lead_messages_transfer_failed" }, { status: 500 });
   }
   if (lead.data?.notes?.trim()) {
+    const existingEventNotes = event.data?.notes?.trim();
+    const combinedNotes = existingEventNotes
+      ? `${existingEventNotes}\n\n${lead.data.notes.trim()}`
+      : lead.data.notes.trim();
     const eventUpdate = await database
       .from("events")
-      .update({ notes: lead.data.notes })
-      .eq("id", result.ids.eventId)
-      .eq("notes", "");
+      .update({ notes: combinedNotes })
+      .eq("id", result.ids.eventId);
     if (eventUpdate.error) return NextResponse.json({ code: "lead_notes_transfer_failed" }, { status: 500 });
   }
   await Promise.all([
