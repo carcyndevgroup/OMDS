@@ -13,6 +13,7 @@ export async function GET(request: Request) {
   const search = params.get("q")?.trim();
   const provider = params.get("provider");
   const leadId = params.get("leadId");
+  const clientId = params.get("clientId");
   const view = params.get("view") ?? "inbox";
 
   let query = database
@@ -24,6 +25,7 @@ export async function GET(request: Request) {
     query = query.eq("provider", provider);
   }
   if (leadId) query = query.eq("lead_id", leadId);
+  if (clientId) query = query.eq("client_id", clientId);
   if (view === "archived") query = query.eq("is_archived", true);
   else if (view === "starred") query = query.eq("is_starred", true).eq("is_archived", false);
   else if (view === "unread") query = query.gt("unread_count", 0).eq("is_archived", false);
