@@ -69,7 +69,7 @@ export function MessageInbox() {
   const [isArchived, setIsArchived] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
   const [syncStatus, setSyncStatus] = useState<"" | "error" | "loading" | "success">("");
-  const [expandedMessages, setExpandedMessages] = useState<Set<string>>(new Set());
+  const [collapsedMessages, setCollapsedMessages] = useState<Set<string>>(new Set());
   const [htmlMessages, setHtmlMessages] = useState<Record<string, string>>({});
   const [isComposing, setIsComposing] = useState(false);
   const [composeTo, setComposeTo] = useState("");
@@ -138,7 +138,7 @@ export function MessageInbox() {
       })
       .catch(() => undefined);
     void fetch(`/api/messages/threads/${selected.id}`, { method: "PATCH" });
-    setExpandedMessages(new Set());
+    setCollapsedMessages(new Set());
     setHtmlMessages({});
     return () => controller.abort();
   }, [selected?.id]);
@@ -280,8 +280,8 @@ export function MessageInbox() {
                 {messages.length === 0 ? <p className="text-sm text-zinc-500">{t("messages.noMessages")}</p> : [...messages].reverse().map((message) => (
                   <div className={`max-w-[85%] rounded-md border border-zinc-800 p-3 ${message.direction === "outbound" ? "ml-auto bg-cyan-300/10" : "bg-zinc-900"}`} key={message.id}>
                     <div className="flex justify-between gap-4 text-xs text-zinc-500"><span><span className="mr-1 text-zinc-600">{t("messages.from")}:</span>{message.sender_name || t("messages.unknownSender")}<span className="ml-1 text-zinc-600">&lt;{message.sender_address}&gt;</span></span><time>{new Date(message.sent_at).toLocaleString()}</time></div>
-                    <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${expandedMessages.has(message.id) ? "" : "max-h-32 overflow-hidden"}`}>{message.body_text}</p>
-                    {message.body_text.length > 700 ? <button className="mt-2 text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => setExpandedMessages((current) => { const next = new Set(current); if (next.has(message.id)) next.delete(message.id); else next.add(message.id); return next; })} type="button">{expandedMessages.has(message.id) ? t("messages.collapseMessage") : t("messages.expandMessage")}</button> : null}
+                    <p className={`mt-2 whitespace-pre-wrap text-sm text-zinc-200 ${collapsedMessages.has(message.id) ? "max-h-32 overflow-hidden" : ""}`}>{message.body_text}</p>
+                    {message.body_text.length > 700 ? <button className="mt-2 text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => setCollapsedMessages((current) => { const next = new Set(current); if (next.has(message.id)) next.delete(message.id); else next.add(message.id); return next; })} type="button">{collapsedMessages.has(message.id) ? t("messages.expandMessage") : t("messages.collapseMessage")}</button> : null}
                     {htmlMessages[message.id] ? <div className="mt-3 max-h-96 overflow-auto rounded border border-zinc-700 bg-white p-3 text-sm text-zinc-900" dangerouslySetInnerHTML={{ __html: htmlMessages[message.id] }} /> : <button className="mt-2 block text-xs font-semibold text-cyan-300 hover:text-cyan-100" onClick={() => void fetch(`/api/messages/messages/${message.id}/html`).then(async (response) => { if (!response.ok) return; const result = await response.json() as { data?: { bodyHtml?: string | null } }; if (result.data?.bodyHtml) setHtmlMessages((current) => ({ ...current, [message.id]: result.data?.bodyHtml ?? "" })); })} type="button">{t("messages.viewFormatted")}</button>}
                     {message.message_attachments?.length ? <div className="mt-3 space-y-2 border-t border-zinc-700 pt-2">{message.message_attachments.map((file) => <div key={file.id}>{file.content_type.startsWith("image/") ? <a href={`/api/messages/attachments/${file.id}`} rel="noreferrer" target="_blank"><img alt={file.file_name} className="max-h-64 max-w-full rounded border border-zinc-700 object-contain" src={`/api/messages/attachments/${file.id}`} /></a> : null}<a className="block truncate text-xs font-semibold text-cyan-300 hover:text-cyan-100" href={`/api/messages/attachments/${file.id}`} rel="noreferrer" target="_blank">{file.file_name}</a></div>)}</div> : null}
                   </div>
