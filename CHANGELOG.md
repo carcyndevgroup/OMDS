@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Associate transferred Lead message threads with the new Client and Event records.
 - Make outbound compose persistence retry-aware by reusing existing provider-linked threads and messages after SMTP delivery.
 - Preserve existing Event notes while appending Lead notes during Lead-to-Client conversion.
 - Refactor the Lead CRM email composer with sanitized client-facing HTML preview and optional attachment sending.

@@ -40,7 +40,7 @@ export async function POST(request: NextRequest, props: ConvertLeadRouteContext)
   ]);
   const threadTransfer = await database
     .from("message_threads")
-    .update({ client_id: result.ids.clientId, lead_id: null, updated_at: new Date().toISOString() })
+    .update({ client_id: result.ids.clientId, event_id: result.ids.eventId, lead_id: null, updated_at: new Date().toISOString() })
     .eq("lead_id", params.id);
   if (threadTransfer.error) {
     return NextResponse.json({ code: "lead_messages_transfer_failed" }, { status: 500 });
