@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Add the required Suspense boundary for Messages query-parameter compose and thread navigation.
 - Repair Client composer JSX and add sanitized HTML preview plus attachment support.
 - Add inline Client email thread reading, attachment access, and SMTP replies.
 - Show unified Client-linked email threads in the Client Messages tab.
