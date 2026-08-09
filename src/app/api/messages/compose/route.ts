@@ -41,10 +41,18 @@ export async function POST(request: Request) {
 
   const now = new Date().toISOString();
   const connection = await database.from("message_connections").select("id").eq("provider", "email").maybeSingle();
-  const thread = await database.from("message_threads").insert({ client_id: typeof payload.clientId === "string" ? payload.clientId : null, connection_id: connection.data?.id ?? null, lead_id: typeof payload.leadId === "string" ? payload.leadId : null, preview: payload.body.trim().slice(0, 240), provider: "email", provider_thread_id: delivery.providerMessageId, subject: payload.subject.trim(), last_message_at: now }).select("id").single();
-  if (thread.error) return NextResponse.json({ code: "thread_create_failed_after_delivery" }, { status: 500 });
-  const message = await database.from("messages").insert({ body_text: payload.body.trim(), direction: "outbound", provider_message_id: delivery.providerMessageId, sender_address: adapterResult.config.address, sender_name: adapterResult.config.address, subject: payload.subject.trim(), thread_id: thread.data.id, sent_at: now }).select("*").single();
-  if (message.error) return NextResponse.json({ code: "message_create_failed_after_delivery" }, { status: 500 });
+  const threadInsert = await database.from("message_threads").insert({ client_id: typeof payload.clientId === "string" ? payload.clientId : null, connection_id: connection.data?.id ?? null, lead_id: typeof payload.leadId === "string" ? payload.leadId : null, preview: payload.body.trim().slice(0, 240), provider: "email", provider_thread_id: delivery.providerMessageId, subject: payload.subject.trim(), last_message_at: now }).select("id").single();
+  const thread = threadInsert.error
+    ? await database.from("message_threads").select("id").eq("provider", "email").eq("provider_thread_id", delivery.providerMessageId).maybeSingle()
+    : threadInsert;
+  if (thread.error || !thread.data) return NextResponse.json({ code: "thread_persistence_failed_after_delivery" }, { status: 500 });
+
+  const messageInsert = await database.from("messages").insert({ body_text: payload.body.trim(), direction: "outbound", provider_message_id: delivery.providerMessageId, sender_address: adapterResult.config.address, sender_name: adapterResult.config.address, subject: payload.subject.trim(), thread_id: thread.data.id, sent_at: now }).select("*").single();
+  const message = messageInsert.error
+    ? await database.from("messages").select("*").eq("provider_message_id", delivery.providerMessageId).maybeSingle()
+    : messageInsert;
+  if (message.error || !message.data) return NextResponse.json({ code: "message_persistence_failed_after_delivery" }, { status: 500 });
+
   const participant = await database.from("message_participants").insert({ address: payload.to.trim(), participant_role: "to", thread_id: thread.data.id });
   if (participant.error) return NextResponse.json({ code: "participant_create_failed_after_delivery" }, { status: 500 });
 

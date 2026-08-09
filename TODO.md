@@ -73,7 +73,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Render sanitized HTML in the Lead CRM composer preview.
 - [x] Add attachment selection to the Lead CRM composer.
 - [ ] Verify converted Lead threads, messages, participants, and attachments appear in Client Messages.
-- [ ] Harden compose persistence when SMTP delivery succeeds but local database persistence fails.
+- [x] Harden compose persistence when SMTP delivery succeeds but local database persistence fails.
 - [ ] Complete Zoho historical backfill and duplicate-handling verification after the 50-message batch limit.
 - [ ] Verify sync completion status updates without requiring a browser refresh.
 - [ ] Verify optimized loading for the previously slow large email thread.
