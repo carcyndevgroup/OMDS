@@ -67,6 +67,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Add server-side email draft persistence for the Lead message composer.
 - [ ] Add the Client-scoped general email composer UI using the persisted draft API.
 - [x] Transfer Lead-linked messages and existing Lead notes to the converted Client event.
+- [x] Link planner, venue-contact, client, and event-contact email fields to Messages compose.
 - [x] Add five-minute mailbox polling while the Messages view is open.
 - [x] Add a protected scheduler entry point for mailbox sync; deployment cron configuration remains environment-specific.
 - [x] Configure Vercel Cron for five-minute mailbox sync.

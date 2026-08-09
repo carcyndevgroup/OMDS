@@ -1,4 +1,5 @@
 import { Mail, Phone } from "lucide-react";
+import Link from "next/link";
 
 import { leadRoleOptions, leadSourceOptions } from "../../lead/constants/lead-options";
 import { formatPhone, phoneHref } from "../../shared/utils/phone-format";
@@ -55,13 +56,13 @@ export function ClientInformationSection({
           {client.legalLastName || t("common.notProvided")}
         </ClientDetailField>
         <ClientDetailField label={t("crm.client.field.email")}>
-          <a
+          <Link
             className="inline-flex max-w-full items-center gap-2 text-cyan-200 hover:text-cyan-100"
-            href={`mailto:${client.email}`}
+            href={`/messages?compose=1&to=${encodeURIComponent(client.email)}`}
           >
             <Mail aria-hidden="true" className="shrink-0" size={16} />
             <span className="truncate">{client.email}</span>
-          </a>
+          </Link>
         </ClientDetailField>
         <ClientDetailField label={t("crm.client.field.phone")}>
           <a className="inline-flex items-center gap-2" href={phoneHref(client.phone)}>

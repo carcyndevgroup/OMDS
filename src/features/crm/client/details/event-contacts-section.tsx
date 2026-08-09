@@ -1,4 +1,5 @@
 import { Mail, Phone } from "lucide-react";
+import Link from "next/link";
 
 import { leadRoleOptions } from "../../lead/constants/lead-options";
 import { formatPhone } from "../../shared/utils/phone-format";
@@ -34,10 +35,10 @@ export function EventContactsSection({ client, t }: ClientDetailSectionProps) {
                     {contact.firstName} {contact.lastName}
                   </p>
                   <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2 text-sm text-zinc-400">
-                    <span className="flex items-center gap-2">
+                    <Link className="flex items-center gap-2 text-cyan-200 hover:text-cyan-100" href={`/messages?compose=1&to=${encodeURIComponent(contact.email)}`}>
                       <Mail aria-hidden="true" size={15} />
                       {contact.email}
-                    </span>
+                    </Link>
                     <span className="flex items-center gap-2">
                       <Phone aria-hidden="true" size={15} />
                       {formatPhone(contact.phone)}

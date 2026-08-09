@@ -193,10 +193,10 @@ export function EventOverview({ event, locale, t }: EventDetailSectionProps) {
                     {roleKey ? t(roleKey) : t("common.notProvided")}
                   </span>
                 </div>
-                <p className="mt-3 flex items-center gap-2 text-sm text-zinc-400">
+                <Link className="mt-3 flex items-center gap-2 text-sm text-cyan-200 hover:text-cyan-100" href={`/messages?compose=1&to=${encodeURIComponent(contact.email)}`}>
                   <Mail aria-hidden="true" size={15} />
                   {contact.email}
-                </p>
+                </Link>
                 <p className="mt-2 flex items-center gap-2 text-sm text-zinc-400">
                   <Phone aria-hidden="true" size={15} />
                   {formatPhone(contact.phone)}
@@ -218,10 +218,10 @@ export function EventOverview({ event, locale, t }: EventDetailSectionProps) {
                     {contact.role || t("common.notProvided")}
                   </span>
                 </div>
-                <p className="mt-3 flex items-center gap-2 text-sm text-zinc-400">
+                {contact.email ? <Link className="mt-3 flex items-center gap-2 text-sm text-cyan-200 hover:text-cyan-100" href={`/messages?compose=1&to=${encodeURIComponent(contact.email)}`}>
                   <Mail aria-hidden="true" size={15} />
-                  {contact.email || t("common.notProvided")}
-                </p>
+                  {contact.email}
+                </Link> : <p className="mt-3 flex items-center gap-2 text-sm text-zinc-400"><Mail aria-hidden="true" size={15} />{t("common.notProvided")}</p>}
                 <p className="mt-2 flex items-center gap-2 text-sm text-zinc-400">
                   <Phone aria-hidden="true" size={15} />
                   {contact.phone ? formatPhone(contact.phone) : t("common.notProvided")}

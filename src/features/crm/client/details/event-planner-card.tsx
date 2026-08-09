@@ -41,10 +41,13 @@ export function EventPlannerCard({
               <span>{eventPlanner.commissionPercentageOverride}%</span>
             ) : null}
             {eventPlanner.email ? (
-              <span className="inline-flex items-center gap-2">
+              <Link
+                className="inline-flex items-center gap-2 text-cyan-200 hover:text-cyan-100"
+                href={`/messages?compose=1&to=${encodeURIComponent(eventPlanner.email)}`}
+              >
                 <Mail aria-hidden="true" size={15} />
                 {eventPlanner.email}
-              </span>
+              </Link>
             ) : null}
           </div>
           {eventPlanner.notes ? (

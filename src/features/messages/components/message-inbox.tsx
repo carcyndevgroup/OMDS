@@ -81,6 +81,12 @@ export function MessageInbox() {
   useEffect(() => {
     const thread = searchParams.get("thread");
     if (thread) setSelectedId(thread);
+    const compose = searchParams.get("compose");
+    const recipient = searchParams.get("to");
+    if (compose === "1") {
+      setIsComposing(true);
+      if (recipient) setComposeTo(recipient);
+    }
   }, [searchParams]);
 
   useEffect(() => {

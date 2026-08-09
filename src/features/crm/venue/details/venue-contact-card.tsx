@@ -1,6 +1,7 @@
 "use client";
 
 import { Mail, Pencil, Phone } from "lucide-react";
+import Link from "next/link";
 
 import type { Translate } from "../../shared/types/form-types";
 import { formatPhone } from "../../shared/utils/phone-format";
@@ -47,10 +48,20 @@ export function VenueContactCard({ contact, onEdit, t }: VenueContactCardProps) 
         </button>
       </div>
       <div className="mt-5 grid gap-3 text-sm font-semibold text-zinc-300 md:grid-cols-2">
-        <span className="inline-flex items-center gap-2">
-          <Mail aria-hidden="true" size={15} />
-          {contact.email || t("common.notProvided")}
-        </span>
+        {contact.email ? (
+          <Link
+            className="inline-flex items-center gap-2 text-cyan-200 hover:text-cyan-100"
+            href={`/messages?compose=1&to=${encodeURIComponent(contact.email)}`}
+          >
+            <Mail aria-hidden="true" size={15} />
+            {contact.email}
+          </Link>
+        ) : (
+          <span className="inline-flex items-center gap-2">
+            <Mail aria-hidden="true" size={15} />
+            {t("common.notProvided")}
+          </span>
+        )}
         <span className="inline-flex items-center gap-2">
           <Phone aria-hidden="true" size={15} />
           {contact.phone ? formatPhone(contact.phone) : t("common.notProvided")}
