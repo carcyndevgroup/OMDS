@@ -66,7 +66,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Keep lead-scoped composition accessible from an empty Messages tab.
 - [x] Add server-side email draft persistence for the Lead message composer.
 - [x] Add the Client-scoped general email composer UI using the persisted draft API.
-- [ ] Replace the Client Messages tab legacy event-draft list with unified client-linked email threads.
+- [x] Replace the Client Messages tab legacy event-draft list with unified client-linked email threads.
 - [ ] Add inline Client thread reading, replies, and attachment access.
 - [ ] Add template token substitution for Lead, Client, Event, and booking data in CRM composers.
 - [ ] Render sanitized HTML in CRM composer previews to match client-facing email output.

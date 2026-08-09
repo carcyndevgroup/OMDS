@@ -1,10 +1,13 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { useEventMessageDrafts } from "../../messages/hooks/use-event-message-drafts";
 import { useMessageDraftMutation } from "../../messages/hooks/use-message-draft-mutation";
 import type { MessageDraft } from "../../messages/types/message-draft";
+import type { Translate } from "../../shared/types/form-types";
 import { ClientDetailSection } from "./client-detail-section";
 import type { ClientDetailSectionProps } from "./client-detail-types";
 import { ClientEmailComposer } from "./client-email-composer";
@@ -22,6 +25,14 @@ const statusKeys = {
   sent: "crm.client.detail.messages.status.sent",
 } as const;
 
+type ClientThread = {
+  id: string;
+  latest_sender_address: string;
+  latest_sender_name: string;
+  preview: string;
+  subject: string;
+};
+
 export function ClientMessagesTab(props: ClientDetailSectionProps) {
   const { client, locale, t } = props;
   const eventId = client.event?.id;
@@ -30,12 +41,29 @@ export function ClientMessagesTab(props: ClientDetailSectionProps) {
     return (
       <ClientDetailSection title={t("crm.client.detail.tab.messages")}>
         <ClientEmailComposer client={client} t={t} />
+        <UnifiedClientThreads clientId={client.id} t={t} />
         <p className="text-sm text-zinc-500">{t("crm.client.detail.empty.event")}</p>
       </ClientDetailSection>
     );
   }
 
   return <MessageList client={client} eventId={eventId} locale={locale} t={t} />;
+}
+
+function UnifiedClientThreads({ clientId, t }: { clientId: string; t: Translate }) {
+  const [threads, setThreads] = useState<ClientThread[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetch(`/api/messages/threads?view=inbox&clientId=${encodeURIComponent(clientId)}`, { signal: controller.signal })
+      .then((response) => response.json() as Promise<{ data?: ClientThread[] }>)
+      .then((result) => { if (!controller.signal.aborted) { setThreads(result.data ?? []); setLoading(false); } })
+      .catch(() => { if (!controller.signal.aborted) setLoading(false); });
+    return () => controller.abort();
+  }, [clientId]);
+
+  return <div className="space-y-3"><h3 className="text-sm font-bold uppercase tracking-wide text-zinc-500">{t("crm.client.detail.tab.messages")}</h3>{loading ? <p className="text-sm text-zinc-500">{t("crm.client.detail.messages.loading")}</p> : null}{!loading && !threads.length ? <p className="text-sm text-zinc-500">{t("crm.client.detail.messages.empty")}</p> : null}{threads.map((thread) => <Link className="block rounded-md border border-zinc-800 bg-zinc-950/50 p-4 hover:border-cyan-300/50" href={`/messages?thread=${encodeURIComponent(thread.id)}`} key={thread.id}><p className="font-bold text-zinc-100">{thread.subject || t("messages.composeEmail")}</p><p className="mt-1 text-xs text-cyan-200">{thread.latest_sender_name || thread.latest_sender_address}</p><p className="mt-2 truncate text-sm text-zinc-400">{thread.preview}</p></Link>)}</div>;
 }
 
 function MessageList(props: Pick<ClientDetailSectionProps, "client" | "locale" | "t"> & {
@@ -54,6 +82,7 @@ function MessageList(props: Pick<ClientDetailSectionProps, "client" | "locale" |
     <ClientDetailSection title={t("crm.client.detail.tab.messages")}>
       <div className="space-y-5">
         <ClientEmailComposer client={client} t={t} />
+        <UnifiedClientThreads clientId={client.id} t={t} />
         {state.isLoading ? <p className="text-sm text-zinc-500">{t("crm.client.detail.messages.loading")}</p> : null}
         {state.hasError ? <p className="text-sm text-rose-300">{t("crm.client.detail.messages.loadError")}</p> : null}
         {!state.isLoading && state.drafts.length === 0 ? (
