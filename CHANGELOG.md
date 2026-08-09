@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Repair Client composer JSX and add sanitized HTML preview plus attachment support.
 - Add inline Client email thread reading, attachment access, and SMTP replies.
 - Show unified Client-linked email threads in the Client Messages tab.
 - Add Client-scoped email composition with templates, preview, server-side drafts, and Client-linked sending.
