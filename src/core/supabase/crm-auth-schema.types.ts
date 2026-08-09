@@ -57,8 +57,8 @@ export type MessageAttachmentTable = {
 };
 
 export type MessageDraftTable = {
-  Row: { id: string; user_id: string; lead_id: string; recipient: string; subject: string; body: string; template_key: string; created_at: string; updated_at: string };
-  Insert: Partial<MessageDraftTable["Row"]> & { user_id: string; lead_id: string };
+  Row: { id: string; user_id: string; lead_id: string | null; client_id: string | null; recipient: string; subject: string; body: string; template_key: string; created_at: string; updated_at: string };
+  Insert: Partial<MessageDraftTable["Row"]> & { user_id: string; lead_id?: string | null; client_id?: string | null };
   Update: Partial<MessageDraftTable["Insert"]>;
   Relationships: [];
 };

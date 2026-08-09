@@ -3,6 +3,7 @@
 All notable changes to the Oh My Desserts & Snacks web application will be documented in this file.
 
 ## [Unreleased]
+- Extend server-side message drafts and CRM email composition to support Client ownership.
 - Persist Lead email drafts server-side per authenticated staff user and Lead.
 - Keep lead email composition available when no linked message threads exist.
 - Add lead-scoped email composition with active templates, editable preview, local draft saving, and SMTP send.

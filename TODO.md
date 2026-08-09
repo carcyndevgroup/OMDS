@@ -65,7 +65,7 @@ Completed items from Task 1 are omitted; remaining open items below.
 - [x] Add lead-scoped email composition with template selection, preview, local draft saving, and send.
 - [x] Keep lead-scoped composition accessible from an empty Messages tab.
 - [x] Add server-side email draft persistence for the Lead message composer.
-- [ ] Extend server-side email draft persistence to the Client message composer.
+- [ ] Add the Client-scoped general email composer UI using the persisted draft API.
 - [x] Add five-minute mailbox polling while the Messages view is open.
 - [x] Add a protected scheduler entry point for mailbox sync; deployment cron configuration remains environment-specific.
 - [x] Configure Vercel Cron for five-minute mailbox sync.
