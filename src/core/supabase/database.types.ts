@@ -60,6 +60,7 @@ import type {
   CrmActivityLogTable,
   MessageAttachmentTable,
   MessageConnectionTable,
+  MessageDraftTable,
   MessageParticipantTable,
   MessageTable,
   MessageThreadTable,
@@ -80,6 +81,7 @@ export type Database = {
       crm_activity_log: CrmActivityLogTable;
       message_attachments: MessageAttachmentTable;
       message_connections: MessageConnectionTable;
+      message_drafts: MessageDraftTable;
       message_participants: MessageParticipantTable;
       message_threads: MessageThreadTable;
       messages: MessageTable;

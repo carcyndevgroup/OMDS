@@ -17,7 +17,7 @@ type LeadMessageThread = {
 };
 
 type Props = { lead: Lead; t: Translate };
-type Draft = { body: string; subject: string; templateKey: string; to: string };
+type Draft = { body: string; recipient: string; subject: string; template_key: string };
 
 export function LeadMessages({ lead, t }: Props) {
   const { options: templates } = useEmailTemplateOptions("general");
@@ -33,8 +33,10 @@ export function LeadMessages({ lead, t }: Props) {
   const [status, setStatus] = useState<"" | "error" | "sent" | "draft">("");
 
   useEffect(() => {
-    const saved = localStorage.getItem(`omds-lead-email-draft-${lead.id}`);
-    if (saved) { try { const draft = JSON.parse(saved) as Draft; setTo(draft.to); setSubject(draft.subject); setBody(draft.body); setTemplateKey(draft.templateKey); } catch { /* Ignore malformed local drafts. */ } }
+    void fetch(`/api/messages/drafts?leadId=${encodeURIComponent(lead.id)}`)
+      .then((response) => response.ok ? response.json() as Promise<{ data?: Draft }> : null)
+      .then((result) => { if (result?.data) { setTo(result.data.recipient); setSubject(result.data.subject); setBody(result.data.body); setTemplateKey(result.data.template_key); } })
+      .catch(() => undefined);
   }, [lead.id]);
 
   useEffect(() => {
@@ -58,13 +60,16 @@ export function LeadMessages({ lead, t }: Props) {
     setTemplateKey(key);
     if (template) { setSubject(template.subject); setBody(template.body); }
   };
-  const saveDraft = () => { localStorage.setItem(`omds-lead-email-draft-${lead.id}`, JSON.stringify({ body, subject, templateKey, to } satisfies Draft)); setStatus("draft"); };
+  const saveDraft = async () => {
+    const response = await fetch("/api/messages/drafts", { body: JSON.stringify({ body, leadId: lead.id, subject, templateKey, to }), headers: { "Content-Type": "application/json" }, method: "PUT" });
+    setStatus(response.ok ? "draft" : "error");
+  };
   const send = async () => {
     setStatus("");
     const form = new FormData(); form.set("leadId", lead.id); form.set("to", to); form.set("subject", subject); form.set("body", body);
     const response = await fetch("/api/messages/compose", { body: form, method: "POST" });
     if (!response.ok) { setStatus("error"); return; }
-    localStorage.removeItem(`omds-lead-email-draft-${lead.id}`); setStatus("sent"); setIsComposing(false); setSubject(""); setBody(""); setTemplateKey("");
+    await fetch(`/api/messages/drafts?leadId=${encodeURIComponent(lead.id)}`, { method: "DELETE" }); setStatus("sent"); setIsComposing(false); setSubject(""); setBody(""); setTemplateKey("");
   };
 
   if (isLoading) return <p className="text-sm text-zinc-500">{t("crm.lead.detail.loading")}</p>;

@@ -39,7 +39,7 @@ export type {
   QuestionnaireFieldCatalogTable,
   QuestionnaireTemplateTable,
 } from "./settings-schema.types";
-export type { AppUserTable, CrmActivityLogTable, CrmArchiveAuditEventTable, LeadServiceTable, LeadTable, MessageAttachmentTable, MessageConnectionTable, MessageParticipantTable, MessageTable, MessageThreadTable } from "./crm-auth-schema.types";
+export type { AppUserTable, CrmActivityLogTable, CrmArchiveAuditEventTable, LeadServiceTable, LeadTable, MessageAttachmentTable, MessageConnectionTable, MessageDraftTable, MessageParticipantTable, MessageTable, MessageThreadTable } from "./crm-auth-schema.types";
 export type { PayrollTaskCatalogTable } from "./payroll-schema.types";
 export type { EventPayrollLineItemTable } from "./payroll-line-item-schema.types";
 export type {
